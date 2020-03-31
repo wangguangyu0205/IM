@@ -1,48 +1,26 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * This file is part of Swoft.
- *
- * @link     https://swoft.org
- * @document https://swoft.org/docs
- * @contact  group@swoft.org
- * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ * @author gaobinzhan <gaobinzhan@gmail.com>
  */
+
 
 namespace App\Validator;
 
-use App\Annotation\Mapping\AlphaDash;
+
+use Swoft\Validator\Annotation\Mapping\IsArray;
 use Swoft\Validator\Annotation\Mapping\IsInt;
-use Swoft\Validator\Annotation\Mapping\IsString;
 use Swoft\Validator\Annotation\Mapping\Validator;
 
 /**
  * Class TestValidator
- *
- * @since 2.0
- *
+ * @package App\Validator
  * @Validator(name="TestValidator")
  */
 class TestValidator
 {
     /**
-     * @IsString()
-     *
-     * @var string
-     */
-    protected $name = 'defualtName';
-
-    /**
-     * @IsInt(message="type must Integer")
-     *
+     * @IsInt()
      * @var int
      */
-    protected $type;
-
-    /**
-     * @IsString()
-     * @AlphaDash(message="Passwords can only be alphabet, numbers, dashes, underscores")
-     *
-     * @var string
-     */
-    protected $password;
+    protected $id;
 }

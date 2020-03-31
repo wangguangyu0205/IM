@@ -15,7 +15,7 @@ use Swoft\View\Annotation\Mapping\View;
 /**
  * Class StaticController
  * @package App\Http\Controller
- * @Controller(prefix="/static")
+ * @Controller(prefix="static")
  */
 class StaticController
 {

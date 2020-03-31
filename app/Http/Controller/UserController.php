@@ -16,7 +16,7 @@ use Swoft\View\Annotation\Mapping\View;
 /**
  * Class UserController
  * @package App\Http\Controller
- * @Controller(prefix="/user")
+ * @Controller(prefix="user")
  */
 class UserController
 {
