@@ -34,8 +34,7 @@ class TestController
      */
     public function getUserName(Request $request)
     {
-        apiValidate($request->get(),'TestValidator');
-        $id = $request->get('id');
+        list($id) = apiValidate($request->get(),'TestValidator');
         $result = '';
         DB::transaction(function () use ($id,&$result) {
             $name = $this->testLogic->getUserName($id);

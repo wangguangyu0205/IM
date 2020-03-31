@@ -48,7 +48,7 @@ if (!function_exists('apiValidate')) {
         /* @var \Swoft\Validator\Validator $validator */
         $validator = \Swoft\Bean\BeanFactory::getBean('validator');
         try {
-            return $validator->validate($data, $validatorName, $fields, $userValidators, $unFields);
+            return array_values($validator->validate($data, $validatorName, $fields, $userValidators, $unFields));
         }catch (\Throwable $throwable){
             throw new \App\Exception\ApiException($throwable->getMessage());
         }
