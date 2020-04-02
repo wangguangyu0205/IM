@@ -79,31 +79,14 @@ return [
     ],
     'db'                => [
         'class'    => Database::class,
-        'dsn'      => 'mysql:dbname=test;host=127.0.0.1',
+        'dsn'      => 'mysql:dbname=im;host=sh-cynosdbmysql-grp-dq4j1whc.sql.tencentcdb.com:23360',
         'username' => 'root',
-        'password' => 'swoft123456',
+        'password' => 'gaobinzhanMysql0604',
         'charset' => 'utf8mb4',
     ],
-    'db2'               => [
-        'class'      => Database::class,
-        'dsn'        => 'mysql:dbname=test2;host=127.0.0.1',
-        'username'   => 'root',
-        'password'   => 'swoft123456',
-//        'dbSelector' => bean(DbSelector::class)
-    ],
-    'db2.pool' => [
+    'db.pool' => [
         'class'    => Pool::class,
-        'database' => bean('db2'),
-    ],
-    'db3'               => [
-        'class'    => Database::class,
-        'dsn'      => 'mysql:dbname=test2;host=127.0.0.1',
-        'username' => 'root',
-        'password' => 'swoft123456'
-    ],
-    'db3.pool'          => [
-        'class'    => Pool::class,
-        'database' => bean('db3')
+        'database' => bean('db'),
     ],
     'migrationManager'  => [
         'migrationPath' => '@database/Migration',
@@ -140,7 +123,7 @@ return [
         'class'   => WebSocketServer::class,
         'port'    => 18308,
         'listener' => [
-            'rpc' => bean('rpcServer'),
+//            'rpc' => bean('rpcServer'),
             // 'tcp' => bean('tcpServer'),
         ],
         'on'      => [

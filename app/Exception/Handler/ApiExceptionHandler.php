@@ -38,7 +38,7 @@ class ApiExceptionHandler extends AbstractHttpErrorHandler
             'msg' => $except->getMessage(),
         ];
 
-        // Debug is false
+        // Debug is true
         if (APP_DEBUG) {
             $data = [
                 'code'  => $except->getCode(),
