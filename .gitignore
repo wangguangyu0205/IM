@@ -12,4 +12,5 @@ vendor/
 .phpstorm.meta.php
 .DS_Store
 public/devtool/
+public/.keep
 bin/php-cs-fixer
