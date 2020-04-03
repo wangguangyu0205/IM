@@ -30,7 +30,7 @@ class ApiExceptionHandler extends AbstractHttpErrorHandler
 {
     /**
      * @param Throwable $except
-     * @param Response  $response
+     * @param Response $response
      *
      * @return Response
      */
@@ -40,26 +40,20 @@ class ApiExceptionHandler extends AbstractHttpErrorHandler
         Log::error($except->getMessage());
         CLog::error('%s. (At %s line %d)', $except->getMessage(), $except->getFile(), $except->getLine());
 
-        if ($except instanceof ValidatorException) {
-            $code = '-1';
-        } else {
-            $code = $except->getCode();
-        }
+        // 这里code默认为-1 因为layIm的api成功返回的code为0
+        $code = ($except->getCode() == 0) ? -1 : $except->getCode();
+        $message = $except->getMessage();
 
-        $data = [
-            'code'  => $code,
-            'msg' => $except->getMessage(),
-        ];
 
         // Debug is true
         if (APP_DEBUG) {
-            $data = [
-                'code'  => $code,
-                'msg' => sprintf('(%s) %s', get_class($except), $except->getMessage()),
-                'file'  => sprintf('At %s line %d', $except->getFile(), $except->getLine()),
-                'trace' => $except->getTraceAsString(),
-            ];
+            $message = sprintf('(%s) %s', get_class($except), $except->getMessage());
         }
-        return $response->withData($data);
+        return throwApiException(
+            $code,
+            $message,
+            sprintf('At %s line %d', $except->getFile(), $except->getLine()),
+            $except->getTraceAsString()
+        );
     }
 }
