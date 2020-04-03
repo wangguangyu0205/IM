@@ -76,9 +76,8 @@
     © layui.com - 底部固定区域
   </div>
 </div>
-<?= $this->include('chat/footer') ?>
-<?= $this->include('chat/init') ?>
-<?= $this->include('chat/socket') ?>
+<script src="/chat/js/init.js"></script>
+<script src="/chat/js/socket.js"></script>
 <script>
   //JavaScript代码区域
   layui.use('element', function(){

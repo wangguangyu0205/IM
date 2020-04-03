@@ -1,31 +1,80 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
   <style>
-    .layim-msgbox{margin: 15px;}
-    .layim-msgbox li{position: relative; margin-bottom: 10px; padding: 0 130px 10px 60px; padding-bottom: 10px; line-height: 22px; border-bottom: 1px dotted #e2e2e2;}
-    .layim-msgbox .layim-msgbox-tips{margin: 0; padding: 10px 0; border: none; text-align: center; color: #999;}
-    .layim-msgbox .layim-msgbox-system{padding: 0 10px 10px 10px;}
-    .layim-msgbox li p span{padding-left: 5px; color: #999;}
-    .layim-msgbox li p em{font-style: normal; color: #FF5722;}
+    .layim-msgbox {
+      margin: 15px;
+    }
 
-    .layim-msgbox-avatar{position: absolute; left: 0; top: 0; width: 50px; height: 50px;}
-    .layim-msgbox-user{padding-top: 5px;}
-    .layim-msgbox-content{margin-top: 3px;}
-    .layim-msgbox .layui-btn-small{padding: 0 15px; margin-left: 5px;}
-    .layim-msgbox-btn{position: absolute; right: 0; top: 12px; color: #999;}
+    .layim-msgbox li {
+      position: relative;
+      margin-bottom: 10px;
+      padding: 0 130px 10px 60px;
+      padding-bottom: 10px;
+      line-height: 22px;
+      border-bottom: 1px dotted #e2e2e2;
+    }
+
+    .layim-msgbox .layim-msgbox-tips {
+      margin: 0;
+      padding: 10px 0;
+      border: none;
+      text-align: center;
+      color: #999;
+    }
+
+    .layim-msgbox .layim-msgbox-system {
+      padding: 0 10px 10px 10px;
+    }
+
+    .layim-msgbox li p span {
+      padding-left: 5px;
+      color: #999;
+    }
+
+    .layim-msgbox li p em {
+      font-style: normal;
+      color: #FF5722;
+    }
+
+    .layim-msgbox-avatar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50px;
+      height: 50px;
+    }
+
+    .layim-msgbox-user {
+      padding-top: 5px;
+    }
+
+    .layim-msgbox-content {
+      margin-top: 3px;
+    }
+
+    .layim-msgbox .layui-btn-small {
+      padding: 0 15px;
+      margin-left: 5px;
+    }
+
+    .layim-msgbox-btn {
+      position: absolute;
+      right: 0;
+      top: 12px;
+      color: #999;
+    }
   </style>
 </head>
-<?= $this->include('chat/header', ['title' => '消息盒子'])  ?>
+<?= $this->include('chat/header', ['title' => '消息盒子']) ?>
 <body>
 
 <ul class="layim-msgbox" id="LAY_view"></ul>
 
 <div style="margin: 0 15px;">
   <blockquote class="layui-elem-quote">注意：这些都是模拟数据，实际使用时，需将其中的模拟接口改为你的项目真实接口。
-    <br>该模版文件所在目录（相对于layui.js）：/css/modules/layim/html/msgbox.html</blockquote>
+    <br>该模版文件所在目录（相对于layui.js）：/css/modules/layim/html/msgbox.html
+  </blockquote>
 </div>
 
 <textarea title="消息模版" id="LAY_tpl" style="display:none;">
@@ -61,34 +110,33 @@
 -->
 
 
-<?= $this->include('chat/footer') ?>
 <script>
-  layui.use(['layim', 'flow'], function(){
+  layui.use(['layim', 'flow'], function () {
     var layim = layui.layim
-      ,layer = layui.layer
-      ,laytpl = layui.laytpl
-      ,$ = layui.jquery
-      ,flow = layui.flow;
+      , layer = layui.layer
+      , laytpl = layui.laytpl
+      , $ = layui.jquery
+      , flow = layui.flow;
 
     var cache = {}; //用于临时记录请求到的数据
 
     //请求消息
-    var renderMsg = function(page, callback){
+    var renderMsg = function (page, callback) {
 
       //实际部署时，请将下述 getmsg.json 改为你的接口地址
 
       $.get('/layim/css/modules/layim/html/getmsg.json', {
         page: page || 1
-      }, function(res){
-        if(res.code != 0){
+      }, function (res) {
+        if (res.code != 0) {
           return layer.msg(res.msg);
         }
 
         //记录来源用户信息
-        layui.each(res.data, function(index, item){
+        layui.each(res.data, function (index, item) {
           cache[item.from] = item.user;
         });
-
+        console.log(res);
         callback && callback(res.data, res.pages);
       });
     };
@@ -96,13 +144,13 @@
     //消息信息流
     flow.load({
       elem: '#LAY_view' //流加载容器
-      ,isAuto: false
-      ,end: '<li class="layim-msgbox-tips">暂无更多新消息</li>'
-      ,done: function(page, next){ //加载下一页
-        renderMsg(page, function(data, pages){
+      , isAuto: false
+      , end: '<li class="layim-msgbox-tips">暂无更多新消息</li>'
+      , done: function (page, next) { //加载下一页
+        renderMsg(page, function (data, pages) {
           var html = laytpl(LAY_tpl.value).render({
             data: data
-            ,page: page
+            , page: page
           });
           next(html, page < pages);
         });
@@ -119,28 +167,28 @@
     //操作
     var active = {
       //同意
-      agree: function(othis){
+      agree: function (othis) {
         var li = othis.parents('li')
-          ,uid = li.data('uid')
-          ,from_group = li.data('fromGroup')
-          ,user = cache[uid];
+          , uid = li.data('uid')
+          , from_group = li.data('fromGroup')
+          , user = cache[uid];
 
         //选择分组
         parent.layui.layim.setFriendGroup({
           type: 'friend'
-          ,username: user.username
-          ,avatar: user.avatar
-          ,group: parent.layui.layim.cache().friend //获取好友分组数据
-          ,submit: function(group, index){
+          , username: user.username
+          , avatar: user.avatar
+          , group: parent.layui.layim.cache().friend //获取好友分组数据
+          , submit: function (group, index) {
 
             //将好友追加到主面板
             parent.layui.layim.addList({
               type: 'friend'
-              ,avatar: user.avatar //好友头像
-              ,username: user.username //好友昵称
-              ,groupid: group //所在的分组id
-              ,id: uid //好友ID
-              ,sign: user.sign //好友签名
+              , avatar: user.avatar //好友头像
+              , username: user.username //好友昵称
+              , groupid: group //所在的分组id
+              , id: uid //好友ID
+              , sign: user.sign //好友签名
             });
             parent.layer.close(index);
             othis.parent().html('已同意');
@@ -176,15 +224,15 @@
       }
 
       //拒绝
-      ,refuse: function(othis){
+      , refuse: function (othis) {
         var li = othis.parents('li')
-          ,uid = li.data('uid');
+          , uid = li.data('uid');
 
-        layer.confirm('确定拒绝吗？', function(index){
+        layer.confirm('确定拒绝吗？', function (index) {
           $.post('/im/refuseFriend', {
             uid: uid //对方用户ID
-          }, function(res){
-            if(res.code != 0){
+          }, function (res) {
+            if (res.code != 0) {
               return layer.msg(res.msg);
             }
             layer.close(index);
@@ -194,7 +242,7 @@
       }
     };
 
-    $('body').on('click', '.layui-btn', function(){
+    $('body').on('click', '.layui-btn', function () {
       var othis = $(this), type = othis.data('type');
       active[type] ? active[type].call(this, othis) : '';
     });

@@ -18,7 +18,7 @@
 
 <div class="father">
   <div class="login-main">
-    ，<p style="color:#009688;font-size:25px;text-align:center;">欢迎登陆</p>
+    <p style="color:#009688;font-size:25px;text-align:center;">欢迎登陆</p>
     <form class="layui-form">
       <div class="layui-input-inline">
         <input type="text" class="layui-input" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
@@ -40,7 +40,6 @@
   </div>
 </div>
 
-<?= $this->include('chat/footer') ?>
 <script type="text/javascript">
   layui.use(['form','layer','jquery'], function () {
 

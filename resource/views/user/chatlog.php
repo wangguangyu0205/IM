@@ -30,7 +30,6 @@
 
 -->
 
-<?= $this->include('chat/footer') ?>
 
 <script>
   layui.use(['layim', 'laypage'], function(){
