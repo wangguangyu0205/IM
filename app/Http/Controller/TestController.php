@@ -14,6 +14,9 @@ use Swoft\Http\Message\Request;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
+use Swoft\Validator\Annotation\Mapping\Validate;
+use App\Validator\TestValidator;
+use Swoft\Validator\Annotation\Mapping\ValidateType;
 /**
  * Class TestController
  * @package App\Http\Controller
@@ -29,12 +32,13 @@ class TestController
 
     /**
      * @RequestMapping(route="getUserName",method={RequestMethod::GET})
+     * @Validate(validator="TestValidator",type=ValidateType::GET)
      * @param Request $request
      * @return \Swoft\Http\Message\Response|\Swoft\Rpc\Server\Response|\Swoft\Task\Response
      */
     public function getUserName(Request $request)
     {
-        list($id) = apiValidate($request->get(),'TestValidator');
+        $id = $request->get('id');
         $result = '';
         DB::transaction(function () use ($id,&$result) {
             $name = $this->testLogic->getUserName($id);

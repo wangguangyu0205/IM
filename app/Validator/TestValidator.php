@@ -7,8 +7,9 @@
 namespace App\Validator;
 
 
-use Swoft\Validator\Annotation\Mapping\IsArray;
 use Swoft\Validator\Annotation\Mapping\IsInt;
+use Swoft\Validator\Annotation\Mapping\NotEmpty;
+use Swoft\Validator\Annotation\Mapping\Required;
 use Swoft\Validator\Annotation\Mapping\Validator;
 
 /**
@@ -20,7 +21,9 @@ class TestValidator
 {
     /**
      * @IsInt()
-     * @var int
+     * @NotEmpty()
+     * @Required()
+     * @var integer
      */
     protected $id;
 }

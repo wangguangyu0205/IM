@@ -28,7 +28,7 @@ class User extends BaseMigration
         $this->schema->createIfNotExists(self::TABLE, function (Blueprint $blueprint) {
             $blueprint->comment('用户');
             $blueprint->increments('user_id')->comment('主键');
-            $blueprint->char('user_login_id', 20)->comment('用户登录帐号');
+            $blueprint->string('email', 50)->comment('用户登录帐号 邮箱');
             $blueprint->char('username', 30)->comment('用户昵称');
             $blueprint->char('password', 60)->comment('用户密码');
             $blueprint->tinyInteger('status', false, true, 1)->default(0)->comment('用户在线状态 0离线 1在线');
