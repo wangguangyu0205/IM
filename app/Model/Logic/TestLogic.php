@@ -27,4 +27,8 @@ class TestLogic
         $info = $this->testDao->getUserInfo($id);
         return $info['name'] ?? '';
     }
+
+    public function addUser(){
+        return $this->testDao->addUser();
+    }
 }

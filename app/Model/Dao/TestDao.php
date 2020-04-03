@@ -28,4 +28,11 @@ class TestDao
     public function getUserInfo($id){
         return $this->testEntity->find($id);
     }
+
+    public function addUser(){
+        return $this->testEntity::insert([
+            'name' => 2,
+            'password' => 2
+        ]);
+    }
 }
