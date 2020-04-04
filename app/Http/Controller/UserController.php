@@ -11,6 +11,7 @@
 namespace App\Http\Controller;
 
 use App\Model\Logic\UserLogic;
+use App\Model\Logic\UserLoginLogLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
@@ -34,6 +35,11 @@ class UserController
      */
     protected $userLogic;
 
+    /**
+     * @Inject()
+     * @var UserLoginLogLogic
+     */
+    protected $userLoginLogLogic;
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
@@ -45,6 +51,7 @@ class UserController
             $email = $request->post('email');
             $password = $request->post('password');
             $userInfo = $this->userLogic->login($email, $password);
+            $this->userLoginLogLogic->insertUserLoginLog($userInfo['userId']);
             return apiSuccess($userInfo);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
