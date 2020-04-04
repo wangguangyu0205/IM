@@ -71,7 +71,6 @@
         setTimeout(function () {
           location.href = static_user_login;
         }, 1000);
-        output(data, user_register);
       });
       return false;
     })

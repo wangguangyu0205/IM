@@ -10,7 +10,6 @@
 use App\Common\DbSelector;
 use App\Process\MonitorProcess;
 use Swoft\Crontab\Process\CrontabProcess;
-use Swoft\Db\Pool;
 use Swoft\Http\Server\HttpServer;
 use Swoft\Task\Swoole\SyncTaskListener;
 use Swoft\Task\Swoole\TaskListener;
@@ -77,6 +76,10 @@ return [
             \Swoft\Http\Server\Middleware\ValidatorMiddleware::class
         ]
     ],
+    'sessionManager' => [
+        'class' => \Swoft\Http\Session\SessionManager::class,
+        'name' => 'IM_SESSION_ID'
+    ],
     'db'                => [
         'class'    => Database::class,
         'dsn'      => 'mysql:dbname=im;host=sh-cynosdbmysql-grp-dq4j1whc.sql.tencentcdb.com:23360',
@@ -85,7 +88,7 @@ return [
         'charset' => 'utf8mb4',
     ],
     'db.pool' => [
-        'class'    => Pool::class,
+        'class'    => \Swoft\Db\Pool::class,
         'database' => bean('db'),
     ],
     'migrationManager'  => [
@@ -95,10 +98,11 @@ return [
         'class'    => RedisDb::class,
         'host'     => '127.0.0.1',
         'port'     => 6379,
-        'database' => 0,
-        'option'   => [
-            'prefix' => 'swoft:'
-        ]
+        'database' => 0
+    ],
+    'redis.pool' => [
+        'class' => \Swoft\Redis\Pool::class,
+        'database' => bean('redis')
     ],
     'user'              => [
         'class'   => ServiceClient::class,

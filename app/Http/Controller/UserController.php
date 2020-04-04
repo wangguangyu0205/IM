@@ -10,10 +10,12 @@
 
 namespace App\Http\Controller;
 
+use App\Helper\JwtHelper;
 use App\Model\Logic\UserLogic;
 use App\Model\Logic\UserLoginLogLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
+use Swoft\Http\Message\Response;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
@@ -45,14 +47,18 @@ class UserController
      * @RequestMapping(route="login",method={RequestMethod::POST})
      * @Validate(validator="UserValidator",fields={"email","password"})
      */
-    public function login(Request $request)
+    public function login(Request $request, Response $response)
     {
         try {
             $email = $request->post('email');
             $password = $request->post('password');
             $userInfo = $this->userLogic->login($email, $password);
+            $token = JwtHelper::encrypt($userInfo['userId']);
             $this->userLoginLogLogic->insertUserLoginLog($userInfo['userId']);
-            return apiSuccess($userInfo);
+            return $response->withCookie('IM_TOKEN', [
+                'value' => $token,
+                'path' => '/',
+            ])->withData(['code' => 0, 'msg' => 'Success', 'data' => $userInfo]);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }
@@ -76,11 +82,22 @@ class UserController
 
     /**
      * @RequestMapping(route="home",method={RequestMethod::GET})
-     * @View(template="user/home")
      */
-    public function home()
+    public function home(Request $request, Response $response)
     {
-        return [];
+        if (checkAuth() === false) return $response->redirect('/static/login');
+        return view('user/home');
+    }
+
+
+    /**
+     * @RequestMapping(route="signOut",method={RequestMethod::GET})
+     */
+    public function signOut(Request $request, Response $response){
+        return context()->getResponse()->withCookie('IM_TOKEN',[
+            'value' => '',
+            'path' => '/'
+        ])->redirect('/static/login');
     }
 
     /**

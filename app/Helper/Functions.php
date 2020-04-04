@@ -1,6 +1,7 @@
 <?php
 
 use App\ExceptionCode\ApiCode;
+use App\Helper\JwtHelper;
 
 /**
  * This file is part of Swoft.
@@ -57,7 +58,7 @@ if (!function_exists('apiError')) {
 }
 
 
-if (!function_exists('throwApiException')){
+if (!function_exists('throwApiException')) {
 
     /**
      * @param $code
@@ -66,17 +67,30 @@ if (!function_exists('throwApiException')){
      * @param string $trace
      * @return \Swoft\Http\Message\Response|\Swoft\Rpc\Server\Response|\Swoft\Task\Response
      */
-   function throwApiException($code, $msg = 'Error', $file = '', $trace = ''){
-       $result = [
-           'code' => $code,
-           'msg' => $msg,
-       ];
-       if (APP_DEBUG) {
-           $result = array_merge($result, [
-               'file' => $file,
-               'trace' => $trace
-           ]);
-       }
-       return context()->getResponse()->withData($result);
-   }
+    function throwApiException($code, $msg = 'Error', $file = '', $trace = '')
+    {
+        $result = [
+            'code' => $code,
+            'msg' => $msg,
+        ];
+        if (APP_DEBUG) {
+            $result = array_merge($result, [
+                'file' => $file,
+                'trace' => $trace
+            ]);
+        }
+        return context()->getResponse()->withData($result);
+    }
+}
+
+if (!function_exists('checkAuth')) {
+    function checkAuth()
+    {
+        $request = context()->getRequest();
+        $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
+        if (!$token || !is_string($token) || !$userId = JwtHelper::decrypt($token)) {
+            return false;
+        }
+        return $userId;
+    }
 }

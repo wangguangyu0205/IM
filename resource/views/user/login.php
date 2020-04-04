@@ -72,7 +72,6 @@
         setTimeout(function () {
           location.href = user_home;
         }, 1000);
-        output(data, user_home);
       });
       return false;
     })
