@@ -26,9 +26,11 @@ class UserLoginLogLogic
 
     public function insertUserLoginLog(int $userId)
     {
+        $request = context()->getRequest();
+        $ip = empty($request->getHeaderLine('x-real-ip')) ? $request->getServerParams()['remote_addr'] : $request->getHeaderLine('x-real-ip');
         $data = [
             'user_id' => $userId,
-            'user_login_ip' => context()->getRequest()->getServerParams()['remote_addr'] ?? ''
+            'user_login_ip' => $ip
         ];
         return $this->userLoginLogDao->insertUserLoginLog($data);
     }
