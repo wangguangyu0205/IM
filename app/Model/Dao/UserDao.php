@@ -23,7 +23,15 @@ class UserDao
      */
     protected $userEntity;
 
-    public function findUserInfo(int $userId){
+    public function findUserInfoById(int $userId){
         return $this->userEntity::whereNull('deleted_at')->find($userId);
+    }
+
+    public function findUserInfoByEmail(string $email){
+        return $this->userEntity::where('email','=',$email)->first();
+    }
+
+    public function insertUser(array $data){
+        return $this->userEntity::insert($data);
     }
 }

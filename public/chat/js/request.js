@@ -1,4 +1,4 @@
-function getRequest(url, params) {
+function getRequest(url, params, callback) {
   layui.use(['jquery'], function () {
     let $ = layui.jquery;
     $.ajax({
@@ -6,16 +6,20 @@ function getRequest(url, params) {
       data: params,
       type: 'get',
       success: function (data) {
-        layer.msg(data.code+' : '+data.msg)
+        if (data && data.code != 0) {
+          layer.msg(data.code + ' : ' + data.msg);
+          return false;
+        }
+        callback && callback(data);
       },
       error: function () {
-        layer.msg('api接口异常')
+        layer.msg('Interface cannot connect : ' + url)
       }
     })
   })
 }
 
-function postRequest(url, params,callback) {
+function postRequest(url, params, callback) {
   layui.use(['jquery'], function () {
     let $ = layui.jquery;
     $.ajax({
@@ -23,18 +27,19 @@ function postRequest(url, params,callback) {
       data: params,
       type: 'post',
       success: function (data) {
-        if(!callback || typeof callback == 'undefined' || callback == undefined){
+        if (data && data.code != 0) {
+          layer.msg(data.code + ' : ' + data.msg);
           return false;
         }
-        callback(data);
-        layer.msg(data.code+' : '+data.msg)
+        callback && callback(data);
       },
       error: function () {
-        layer.msg('api接口异常')
+        layer.msg('Interface cannot connect : ' + url)
       }
     })
   })
 }
+
 export {
   getRequest,
   postRequest

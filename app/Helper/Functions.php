@@ -24,7 +24,7 @@ if (!function_exists('apiSuccess')) {
      * @param string $msg
      * @return \Swoft\Http\Message\Response|\Swoft\Rpc\Server\Response|\Swoft\Task\Response
      */
-    function apiSuccess($data, $code = 0, $msg = 'Success')
+    function apiSuccess($data = [], $code = 0, $msg = 'Success')
     {
         $result = [
             'code' => $code,
@@ -46,6 +46,7 @@ if (!function_exists('apiError')) {
      */
     function apiError($code = -1, $msg = 'Error')
     {
+        $code = ($code == 0) ? -1 : $code;
         $msg = ApiCode::$errorMessages[$code] ?? $msg;
         $result = [
             'code' => $code,

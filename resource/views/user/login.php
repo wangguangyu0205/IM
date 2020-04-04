@@ -1,27 +1,46 @@
-<?php
-/**
- * @var \Swoft\View\Renderer $this
- */
-?>
 <!DOCTYPE html>
 <html lang="en">
-<?= $this->include('chat/header', ['title' => '登录'])  ?>
+<?= $this->include('chat/header', ['title' => '登录']) ?>
 <style>
-  .father{width:1000px;height:auto;margin:0 auto;}
-  .layui-input{width:300px;line-height:40px;}
-  .login-main{margin-top:300px;margin-left:350px;width:300px;height:400px;/* border:1px solid #e6e6e6; */}
-  .layui-form{margin-top:20px;}
-  .layui-input-inline{margin-top:30px;}
-  button{width:300px;}
+  .father {
+    width: 1000px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .layui-input {
+    width: 300px;
+    line-height: 40px;
+  }
+
+  .login-main {
+    margin-top: 230px;
+    margin-left: 350px;
+    width: 300px;
+    height: 400px; /* border:1px solid #e6e6e6; */
+  }
+
+  .layui-form {
+    margin-top: 20px;
+  }
+
+  .layui-input-inline {
+    margin-top: 30px;
+  }
+
+  button {
+    width: 300px;
+  }
 </style>
 <body>
 
 <div class="father">
   <div class="login-main">
-    <p style="color:#009688;font-size:25px;text-align:center;">欢迎登陆</p>
+    <p style="color:#009688;font-size:25px;text-align:center;">欢迎登录</p>
     <form class="layui-form">
       <div class="layui-input-inline">
-        <input type="text" class="layui-input" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+        <input type="text" class="layui-input" name="email" required lay-verify="required|email" placeholder="请输入邮箱"
+               autocomplete="off"
                class="layui-input">
       </div>
       <br>
@@ -35,35 +54,28 @@
       </div>
       <hr/>
 
-      <p><a href="/user/register" class="fl">立即注册</a></p>
+      <p><a href="/static/register" class="fl">立即注册</a></p>
     </form>
   </div>
 </div>
 
-<script type="text/javascript">
-  layui.use(['form','layer','jquery'], function () {
+<script type="module">
+  import {output} from '/chat/js/util.js';
+  import {user_login, user_home} from '/chat/js/api.js';
+  import {postRequest} from '/chat/js/request.js';
 
-    // 操作对象
+  layui.use(['form', 'layer', 'jquery'], function () {
     var form = layui.form;
-    var $ = layui.jquery;
-    form.on('submit(login)',function (data) {
-      // console.log(data.field);
-      $.ajax({
-        url:'login.php',
-        data:data.field,
-        dataType:'text',
-        type:'post',
-        success:function (data) {
-          if (data == '1'){
-            location.href = "../index.php";
-          }else{
-            layer.msg('登录名或密码错误');
-          }
-        }
-      })
+    form.on('submit(login)', function (data) {
+      postRequest(user_login, data.field, function (data) {
+        layer.msg(data.msg);
+        setTimeout(function () {
+          location.href = user_home;
+        }, 1000);
+        output(data, user_home);
+      });
       return false;
     })
-
   });
 </script>
 </body>

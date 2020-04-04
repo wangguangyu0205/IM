@@ -21,7 +21,9 @@ class ApiCode
 
     const
         USER_NOT_FOUND = 3001,
-        USER_ID_INVALID = 3002;
+        USER_ID_INVALID = 3002,
+        USER_EMAIL_ALREADY_USE = 3003,
+        USER_PASSWORD_ERROR = 3004;
 
     // ext 9000~9999
     const
@@ -32,15 +34,18 @@ class ApiCode
     public static $errorMessages = [
 
 
-        self::AUTH_ERROR => 'Authorization has been denied for this request!',
+        self::AUTH_ERROR => 'Authorization has been denied for this request !',
 
 
         self::USER_NOT_FOUND => 'User not found!',
-        self::USER_ID_INVALID => 'The user id is invalid!',
+        self::USER_ID_INVALID => 'The user id is invalid !',
+        self::USER_EMAIL_ALREADY_USE => 'This mailbox is already in use !',
+        self::USER_PASSWORD_ERROR => 'User password input error !',
 
-        self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid!',
-        self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid!',
-        self::JWT_ALG_EMPTY => 'The alg is invalid!',
+        self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid !',
+        self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid !',
+        self::JWT_ALG_EMPTY => 'The alg is invalid !',
+
 
     ];
 }
