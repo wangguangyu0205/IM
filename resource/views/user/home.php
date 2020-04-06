@@ -54,8 +54,8 @@ EOF;
     © layui.com - 底部固定区域
   </div>
 </div>
-<script src="/chat/js/init.js"></script>
-<script src="/chat/js/socket.js"></script>
+<script type="module" src="/chat/js/init.js"></script>
+<script type="module" src="/chat/js/socket.js"></script>
 <script>
   layui.use(['layer', 'jquery', 'element'], function () {
     var layer = layui.layer;

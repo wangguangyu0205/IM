@@ -37,13 +37,18 @@ class AuthMiddleware implements MiddlewareInterface
 
         $authorization = $request->getHeaderLine('Authorization');
 
+        $prefix = 'Bearer ';
+
+        if (empty($authorization)) {
+            $authorization = $prefix . $request->getQueryParams()['token'] ?? '';
+        }
+
         $publicKey = config('jwt.public_key');
 
         if (empty($publicKey)) {
-            throw new ApiException('',ApiCode::JWT_PUBLIC_KEY_EMPTY);
+            throw new ApiException('', ApiCode::JWT_PUBLIC_KEY_EMPTY);
         }
 
-        $prefix = 'Bearer ';
         if (empty($authorization) || !is_string($authorization) || strpos($authorization, $prefix) !== 0) {
             throw new ApiException('', ApiCode::AUTH_ERROR);
         }

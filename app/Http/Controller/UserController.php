@@ -10,17 +10,21 @@
 
 namespace App\Http\Controller;
 
+use App\Helper\AuthHelper;
 use App\Helper\JwtHelper;
+use App\Model\Entity\User;
 use App\Model\Logic\UserLogic;
 use App\Model\Logic\UserLoginLogLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
 use Swoft\Http\Message\Response;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
+use Swoft\Http\Server\Annotation\Mapping\Middleware;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
 use Swoft\Validator\Annotation\Mapping\Validate;
 use Swoft\View\Annotation\Mapping\View;
+use App\Http\Middleware\AuthMiddleware;
 
 /**
  * Class UserController
@@ -38,12 +42,6 @@ class UserController
     protected $userLogic;
 
     /**
-     * @Inject()
-     * @var UserLoginLogLogic
-     */
-    protected $userLoginLogLogic;
-
-    /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
      * @Validate(validator="UserValidator",fields={"email","password"})
      */
@@ -54,7 +52,7 @@ class UserController
             $password = $request->post('password');
             $userInfo = $this->userLogic->login($email, $password);
             $token = JwtHelper::encrypt($userInfo['userId']);
-            $this->userLoginLogLogic->insertUserLoginLog($userInfo['userId']);
+            $this->userLogic->insertUserLoginLog($userInfo['userId']);
             return $response->withCookie('IM_TOKEN', [
                 'value' => $token,
                 'path' => '/',
@@ -88,7 +86,7 @@ class UserController
         if (!$userId = checkAuth()) return $response->redirect('/static/login');
         $menus = config('menu');
         $userInfo = $this->userLogic->findUserInfoById($userId);
-        return view('user/home', ['menus' => $menus,'userInfo' => $userInfo]);
+        return view('user/home', ['menus' => $menus, 'userInfo' => $userInfo]);
     }
 
 
@@ -101,6 +99,24 @@ class UserController
             'value' => '',
             'path' => '/'
         ])->redirect('/static/login');
+    }
+
+    /**
+     * @RequestMapping(route="init",method={RequestMethod::GET})
+     * @Middleware(AuthMiddleware::class)
+     */
+    public function userInit(Request $request)
+    {
+        $userId = $request->user;
+        $userInfo = AuthHelper::userInfo($userId);
+        $mine = [
+            'username' => $userInfo->getUsername(),
+            'id' => $userInfo->getUserId(),
+            'status' => User::STATUS_TEXT[$userInfo->getStatus()],
+            'sign' => $userInfo->getSign(),
+            'avatar' => $userInfo->getAvatar(),
+        ];
+        return apiSuccess(['mine' => $mine]);
     }
 
     /**

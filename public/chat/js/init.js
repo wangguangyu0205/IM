@@ -1,8 +1,16 @@
+import {user_init} from "./api.js";
+import {getCookie} from "./util.js";
 layui.use('layim', function(layim){
   //基础配置
   layim.config({
 
-    init: {} //获取主面板列表信息，下文会做进一步介绍
+    init: {
+      url:user_init,
+      type:'get',
+      data:{
+        token:getCookie('IM_TOKEN')
+      }
+    }
 
     //获取群员接口（返回的数据格式见下文）
     ,members: {
