@@ -13,7 +13,7 @@ use App\Model\Entity\User;
 
 trait AuthHelper
 {
-    public function userInfo()
+    public static function userInfo()
     {
         if (!is_int($userId = context()->getRequest()->user)) {
             throw new ApiException('',ApiCode::USER_ID_INVALID);
@@ -22,7 +22,7 @@ trait AuthHelper
         /**
          * @var User $userInfo
          */
-        $userInfo = bean('App\Model\Dao\UserDao')->findUserInfoById($userId);
+        $userInfo = bean('App\Model\Logic\UserLogic')->findUserInfoById($userId);
 
         if (!$userInfo) {
             throw new ApiException('',ApiCode::USER_NOT_FOUND);

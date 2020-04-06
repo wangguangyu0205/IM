@@ -85,16 +85,19 @@ class UserController
      */
     public function home(Request $request, Response $response)
     {
-        if (checkAuth() === false) return $response->redirect('/static/login');
-        return view('user/home');
+        if (!$userId = checkAuth()) return $response->redirect('/static/login');
+        $menus = config('menu');
+        $userInfo = $this->userLogic->findUserInfoById($userId);
+        return view('user/home', ['menus' => $menus,'userInfo' => $userInfo]);
     }
 
 
     /**
      * @RequestMapping(route="signOut",method={RequestMethod::GET})
      */
-    public function signOut(Request $request, Response $response){
-        return context()->getResponse()->withCookie('IM_TOKEN',[
+    public function signOut(Request $request, Response $response)
+    {
+        return context()->getResponse()->withCookie('IM_TOKEN', [
             'value' => '',
             'path' => '/'
         ])->redirect('/static/login');

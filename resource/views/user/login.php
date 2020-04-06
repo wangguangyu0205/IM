@@ -60,7 +60,6 @@
 </div>
 
 <script type="module">
-  import {output} from '/chat/js/util.js';
   import {user_login, user_home} from '/chat/js/api.js';
   import {postRequest} from '/chat/js/request.js';
 

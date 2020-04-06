@@ -19,7 +19,6 @@ use Swoft\Db\Eloquent\Model;
  */
 class User extends Model
 {
-    const DEFAULT_USERNAME = 'IM-';
     const DEFAULT_AVATAR = 'https://qiniu.gaobinzhan.com/2020/04/04/82d8913d8430b.jpg';
     const STATUS_ONLINE = 1;
     const STATUS_OFFLINE = 0;

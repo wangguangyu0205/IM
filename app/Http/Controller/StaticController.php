@@ -21,11 +21,10 @@ class StaticController
 {
     /**
      * @RequestMapping(route="login",method={RequestMethod::GET})
-     * @View(template="user/login")
      */
-    public function login() : array
+    public function login()
     {
-        return [];
+        return view('user/login');
     }
 
     /**

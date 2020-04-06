@@ -39,7 +39,7 @@ class UserLogic
         return $this->insertUser(
             [
                 'email' => $email,
-                'username' => User::DEFAULT_USERNAME.$email,
+                'username' => $email,
                 'password' => password_hash($password,CRYPT_BLOWFISH),
                 'sign'  => '',
                 'status' => User::STATUS_OFFLINE,

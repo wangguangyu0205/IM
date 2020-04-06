@@ -91,6 +91,11 @@ if (!function_exists('checkAuth')) {
         if (!$token || !is_string($token) || !$userId = JwtHelper::decrypt($token)) {
             return false;
         }
+        $userInfo = bean('App\Model\Logic\UserLogic')->findUserInfoById($userId);
+        if (!$userInfo) {
+            return false;
+        }
+        $request->user = $userId;
         return $userId;
     }
 }
