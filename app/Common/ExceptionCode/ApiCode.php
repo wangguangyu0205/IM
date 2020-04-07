@@ -25,6 +25,9 @@ class ApiCode
         USER_EMAIL_ALREADY_USE = 3003,
         USER_PASSWORD_ERROR = 3004;
 
+    const FRIEND_GROUP_CREATE_ERROR = 4001,
+        FRIEND_GROUP_NOT_FOUND = 4002;
+
     // ext 9000~9999
     const
         JWT_PRIVATE_KEY_EMPTY = 9001,
@@ -42,9 +45,13 @@ class ApiCode
         self::USER_EMAIL_ALREADY_USE => 'This mailbox is already in use !',
         self::USER_PASSWORD_ERROR => 'User password input error !',
 
+        self::FRIEND_GROUP_CREATE_ERROR => 'Friend group creation failed !',
+        self::FRIEND_GROUP_NOT_FOUND => 'Friend group not found !',
+
         self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid !',
         self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid !',
         self::JWT_ALG_EMPTY => 'The alg is invalid !',
+
 
 
     ];

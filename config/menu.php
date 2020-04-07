@@ -8,8 +8,8 @@ return [
         'child' => [
             [
                 'title' => '创建分组',
-                'id' => 'addFriendGroup',
-                'url' => '/static/addFriendGroup'
+                'id' => 'createFriendGroup',
+                'url' => '/static/createFriendGroup'
             ]
         ]
     ]

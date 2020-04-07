@@ -14,7 +14,10 @@ function getRequest(url, params, callback) {
       success: function (data) {
         output(data, url);
         layer.closeAll('loading');
-        if (data && data.code != 0) {
+        if ($.isEmptyObject(data)){
+          return false;
+        }
+        if (data.code && data.code != 0) {
           layer.msg(data.code + ' : ' + data.msg);
           return false;
         }
@@ -42,7 +45,10 @@ function postRequest(url, params, callback) {
       success: function (data) {
         output(data, url);
         layer.closeAll('loading');
-        if (data && data.code != 0) {
+        if ($.isEmptyObject(data)){
+          return false;
+        }
+        if (data.code && data.code != 0) {
           layer.msg(data.code + ' : ' + data.msg);
           return false;
         }

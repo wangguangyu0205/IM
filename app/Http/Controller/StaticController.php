@@ -7,10 +7,12 @@
 namespace App\Http\Controller;
 
 
+use Swoft\Http\Message\Request;
+use Swoft\Http\Message\Response;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
-use Swoft\View\Annotation\Mapping\View;
+use function view;
 
 /**
  * Class StaticController
@@ -29,10 +31,18 @@ class StaticController
 
     /**
      * @RequestMapping(route="register",method={RequestMethod::GET})
-     * @View(template="user/register")
      */
-    public function register() : array
+    public function register()
     {
-        return [];
+        return view('user/register');
+    }
+
+    /**
+     * @RequestMapping(route="createFriendGroup",method={RequestMethod::GET})
+     */
+    public function createFriendGroup(Request $request, Response $response)
+    {
+        if (!$userId = checkAuth()) return $response->redirect('/static/login');
+        return view('friend/createGroup');
     }
 }

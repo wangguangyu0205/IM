@@ -86,7 +86,7 @@ class UserController
     {
         if (!$userId = checkAuth()) return $response->redirect('/static/login');
         $menus = config('menu');
-        $userInfo = $this->userLogic->findUserInfoById($userId);
+        $userInfo = $request->userInfo;
         return view('user/home', ['menus' => $menus, 'userInfo' => $userInfo]);
     }
 
@@ -108,16 +108,19 @@ class UserController
      */
     public function userInit(Request $request)
     {
-        $userId = $request->user;
-        $userInfo = $this->userInfo($userId);
-        $mine = [
-            'username' => $userInfo->getUsername(),
-            'id' => $userInfo->getUserId(),
-            'status' => User::STATUS_TEXT[$userInfo->getStatus()],
-            'sign' => $userInfo->getSign(),
-            'avatar' => $userInfo->getAvatar(),
-        ];
-        return apiSuccess(['mine' => $mine]);
+        try {
+            $userInfo = $request->userInfo;
+            $mine = [
+                'username' => $userInfo->getUsername(),
+                'id' => $userInfo->getUserId(),
+                'status' => User::STATUS_TEXT[$userInfo->getStatus()],
+                'sign' => $userInfo->getSign(),
+                'avatar' => $userInfo->getAvatar(),
+            ];
+            return apiSuccess(['mine' => $mine]);
+        } catch (\Throwable $throwable) {
+            return apiError($throwable->getCode(), $throwable->getMessage());
+        }
     }
 
     /**

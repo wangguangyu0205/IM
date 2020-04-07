@@ -96,6 +96,8 @@ if (!function_exists('checkAuth')) {
             return false;
         }
         $request->user = $userId;
+        $request->userInfo = $userInfo;
+        
         return $userId;
     }
 }

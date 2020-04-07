@@ -38,6 +38,7 @@ return [
     'httpServer'        => [
         'class'    => HttpServer::class,
         'port'     => 9091,
+        'pidName'  => 'IM-http',
         'listener' => [
             // 'rpc' => bean('rpcServer'),
             // 'tcp' => bean('tcpServer'),

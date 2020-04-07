@@ -43,17 +43,5 @@ layui.use('layim', function (layim) {
   });
   layim.on('ready', function (options) {
     layim.msgbox(5);
-    layim.cache().friend.push({
-      groupname:'前端码屌',
-      id:1,
-      list:[]
-    });
-    var $ = layui.jquery;
-    var li = $(".layim-list-friend").find('>li').first();
-    if (li.find('>ul').find('>li').hasClass('layim-null')) {
-      li.remove()
-    }
-    var html = '<li><h5 layim-event="spread" lay-type="spread"><i class="layui-icon"></i><span>前端码屌</span><em>(<cite class="layim-count"> 0</cite>)</em></h5><ul class="layui-layim-list"><li class="layim-null">该分组下暂无好友</li></ul></li>';
-    $(".layim-list-friend").append(html)
   });
 });
