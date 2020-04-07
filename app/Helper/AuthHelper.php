@@ -13,7 +13,11 @@ use App\Model\Entity\User;
 
 trait AuthHelper
 {
-    public static function userInfo()
+    /**
+     * @return User
+     * @throws ApiException
+     */
+    public function userInfo()
     {
         if (!is_int($userId = context()->getRequest()->user)) {
             throw new ApiException('',ApiCode::USER_ID_INVALID);

@@ -14,7 +14,6 @@ use App\Helper\AuthHelper;
 use App\Helper\JwtHelper;
 use App\Model\Entity\User;
 use App\Model\Logic\UserLogic;
-use App\Model\Logic\UserLoginLogLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
 use Swoft\Http\Message\Response;
@@ -34,12 +33,14 @@ use App\Http\Middleware\AuthMiddleware;
  */
 class UserController
 {
+    use AuthHelper;
 
     /**
      * @Inject()
      * @var UserLogic
      */
     protected $userLogic;
+
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
@@ -108,7 +109,7 @@ class UserController
     public function userInit(Request $request)
     {
         $userId = $request->user;
-        $userInfo = AuthHelper::userInfo($userId);
+        $userInfo = $this->userInfo($userId);
         $mine = [
             'username' => $userInfo->getUsername(),
             'id' => $userInfo->getUserId(),
