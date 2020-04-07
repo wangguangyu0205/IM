@@ -31,8 +31,8 @@ return [
         'logFile' => '@runtime/logs/error-%d{Y-m-d}.log',
     ],
     'logger'            => [
-        'flushRequest' => false,
-        'enable'       => false,
+        'flushRequest' => true,
+        'enable'       => true,
         'json'         => false,
     ],
     'httpServer'        => [
