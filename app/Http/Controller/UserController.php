@@ -53,7 +53,7 @@ class UserController
             $password = $request->post('password');
             $userInfo = $this->userLogic->login($email, $password);
             $token = JwtHelper::encrypt($userInfo['userId']);
-            $this->userLogic->insertUserLoginLog($userInfo['userId']);
+            $this->userLogic->createUserLoginLog($userInfo['userId']);
             return $response->withCookie('IM_TOKEN', [
                 'value' => $token,
                 'path' => '/',

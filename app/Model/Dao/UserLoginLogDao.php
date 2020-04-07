@@ -24,7 +24,7 @@ class UserLoginLogDao
      */
     protected $userLoginLogEntity;
 
-    public function insertUserLoginLog(array $data)
+    public function createUserLoginLog(array $data)
     {
         return $this->userLoginLogEntity::insert($data);
     }

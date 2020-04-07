@@ -31,7 +31,7 @@ class UserDao
         return $this->userEntity::where('email','=',$email)->first();
     }
 
-    public function insertUser(array $data){
+    public function createUser(array $data){
         return $this->userEntity::insert($data);
     }
 }

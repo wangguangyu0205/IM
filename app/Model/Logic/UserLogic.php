@@ -43,7 +43,7 @@ class UserLogic
         if ($userInfo) {
             throw new \Exception('', ApiCode::USER_EMAIL_ALREADY_USE);
         }
-        return $this->insertUser(
+        return $this->createUser(
             [
                 'email' => $email,
                 'username' => $email,
@@ -69,7 +69,7 @@ class UserLogic
         return $userInfo->toArray();
     }
 
-    public function insertUserLoginLog(int $userId)
+    public function createUserLoginLog(int $userId)
     {
         $request = context()->getRequest();
         $ip = empty($request->getHeaderLine('x-real-ip')) ? $request->getServerParams()['remote_addr'] : $request->getHeaderLine('x-real-ip');
@@ -77,7 +77,7 @@ class UserLogic
             'user_id' => $userId,
             'user_login_ip' => $ip
         ];
-        return $this->userLoginLogDao->insertUserLoginLog($data);
+        return $this->userLoginLogDao->createUserLoginLog($data);
     }
 
     public function findUserInfoByEmail(string $email)
@@ -85,9 +85,9 @@ class UserLogic
         return $this->userDao->findUserInfoByEmail($email);
     }
 
-    public function insertUser(array $data)
+    public function createUser(array $data)
     {
-        return $this->userDao->insertUser($data);
+        return $this->userDao->createUser($data);
     }
 
 }
