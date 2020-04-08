@@ -28,30 +28,32 @@ use const APP_DEBUG;
 class HttpExceptionHandler extends AbstractHttpErrorHandler
 {
     /**
-     * @param Throwable $e
+     * @param Throwable $except
      * @param Response  $response
      *
      * @return Response
      */
-    public function handle(Throwable $e, Response $response): Response
+    public function handle(Throwable $except, Response $response): Response
     {
         // Log error message
-        Log::error($e->getMessage());
-        CLog::error('%s. (At %s line %d)', $e->getMessage(), $e->getFile(), $e->getLine());
+        Log::error($except->getMessage());
+        CLog::error('%s. (At %s line %d)', $except->getMessage(), $except->getFile(), $except->getLine());
 
-        // Debug is false
-        if (!APP_DEBUG) {
-            return $response->withStatus(500)->withContent($e->getMessage());
-        }
+        // 这里code默认为-1 因为layIm的api成功返回的code为0
+        $code = ($except->getCode() == 0) ? -1 : $except->getCode();
+        $message = $except->getMessage();
 
-        $data = [
-            'code'  => $e->getCode(),
-            'error' => sprintf('(%s) %s', get_class($e), $e->getMessage()),
-            'file'  => sprintf('At %s line %d', $e->getFile(), $e->getLine()),
-            'trace' => $e->getTraceAsString(),
-        ];
+
 
         // Debug is true
-        return $response->withData($data);
+        if (APP_DEBUG) {
+            $message = sprintf('(%s) %s', get_class($except), $except->getMessage());
+        }
+        return throwApiException(
+            $code,
+            $message,
+            sprintf('At %s line %d', $except->getFile(), $except->getLine()),
+            $except->getTraceAsString()
+        );
     }
 }
