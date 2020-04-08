@@ -81,7 +81,7 @@
   </div>
   <div class="layui-form-item layui-col-xs10 layui-col-xs-offset1" style="padding-top: 30px;">
     <div class="layui-input-block">
-      <a lay-submit lay-filter="createFriendGroup" class="layui-btn btncolor sure">确认创建</a>
+      <a lay-submit lay-filter="createFriendGroup" class="layui-btn">确认创建</a>
       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
     </div>
   </div>
