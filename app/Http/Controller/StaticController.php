@@ -42,7 +42,14 @@ class StaticController
      */
     public function createFriendGroup(Request $request, Response $response)
     {
-        if (!$userId = checkAuth()) return $response->redirect('/static/login');
         return view('friend/createGroup');
+    }
+
+    /**
+     * @RequestMapping(route="findUser",method={RequestMethod::GET})
+     */
+    public function findUser(Request $request, Response $response)
+    {
+        return view('friend/findUser');
     }
 }

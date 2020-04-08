@@ -34,10 +34,12 @@ EOF;
           <dl class="layui-nav-child">
             <dd><a href="javascript:;" class="addIframe" im-width="{$child['width']}" im-height="{$child['height']}" im-title="{$child['title']}" im-id="{$child['id']}" im-url="{$child['url']}">{$child['title']}</a></dd>
           </dl>
-        </li>
 EOF;
           }
-        } ?>
+          echo "
+        </li>";
+        }
+        ?>
       </ul>
     </div>
   </div>

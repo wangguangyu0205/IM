@@ -12,7 +12,6 @@ namespace App\Http\Controller;
 
 use App\Helper\AuthHelper;
 use App\Helper\JwtHelper;
-use App\Model\Entity\User;
 use App\Model\Logic\FriendLogic;
 use App\Model\Logic\UserLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
@@ -25,6 +24,7 @@ use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
 use Swoft\Validator\Annotation\Mapping\Validate;
 use Swoft\View\Annotation\Mapping\View;
 use App\Http\Middleware\AuthMiddleware;
+use function view;
 
 /**
  * Class UserController
@@ -128,15 +128,6 @@ class UserController
      * @View(template="user/msgbox")
      */
     public function msgBox()
-    {
-        return [];
-    }
-
-    /**
-     * @RequestMapping(route="findUser",method={RequestMethod::GET})
-     * @View(template="user/finduser")
-     */
-    public function findUser()
     {
         return [];
     }
