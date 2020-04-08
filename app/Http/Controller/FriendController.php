@@ -44,10 +44,13 @@ class FriendController
     {
         try {
             $friendGroupName = $request->post('friend_group_name');
+
             $friendGroupId = $this->friendLogic->createFriendGroup($request->user,$friendGroupName);
             if (!$friendGroupId) throw new \Exception('',ApiCode::FRIEND_GROUP_CREATE_ERROR);
+
             $result = $this->friendLogic->findFriendGroupById($friendGroupId);
             if (!$result) throw new \Exception('',ApiCode::FRIEND_GROUP_NOT_FOUND);
+
             return apiSuccess([
                 'id' => $result->getFriendGroupId(),
                 'groupname' => $result->getFriendGroupName()

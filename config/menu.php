@@ -9,7 +9,9 @@ return [
             [
                 'title' => '创建分组',
                 'id' => 'createFriendGroup',
-                'url' => '/static/createFriendGroup'
+                'url' => '/static/createFriendGroup',
+                'width' => '550px',
+                'height' => '400px',
             ]
         ]
     ]

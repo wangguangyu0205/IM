@@ -7,7 +7,8 @@
     <div class="layui-logo">IM</div>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
-        <a href="javascript:;"><img src="<?= $userInfo['avatar'] ?>" class="layui-nav-img"><?= $userInfo['username'] ?></a>
+        <a href="javascript:;"><img src="<?= $userInfo['avatar'] ?>" class="layui-nav-img"><?= $userInfo['username'] ?>
+        </a>
         <dl class="layui-nav-child">
           <dd><a href="javascript:;">修改头像</a></dd>
           <dd><a href="javascript:;">修改昵称</a></dd>
@@ -31,7 +32,7 @@ EOF;
           foreach ($menu['child'] as $child) {
             echo <<<EOF
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;" class="addIframe" im-title="{$child['title']}" im-id="{$child['id']}" im-url="{$child['url']}">{$child['title']}</a></dd>
+            <dd><a href="javascript:;" class="addIframe" im-width="{$child['width']}" im-height="{$child['height']}" im-title="{$child['title']}" im-id="{$child['id']}" im-url="{$child['url']}">{$child['title']}</a></dd>
           </dl>
         </li>
 EOF;
@@ -66,11 +67,13 @@ EOF;
       let title = $(this).attr('im-title');
       let id = $(this).attr('im-id');
       let url = $(this).attr('im-url');
+      let width = $(this).attr('im-width');
+      let height = $(this).attr('im-height');
       layer.open({
         title: title,
         type: 2,
         closeBtn: 1,
-        area: ['1000px', '520px'],
+        area: [width, height],
         id: id,
         maxmin: true,
         zIndex: layer.zIndex,
