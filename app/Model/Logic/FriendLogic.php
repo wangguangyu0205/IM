@@ -39,7 +39,7 @@ class FriendLogic
      */
     protected $userDao;
 
-    public function createFriendGroup(int $userId, string $friendGroupName):int
+    public function createFriendGroup(int $userId, string $friendGroupName): int
     {
         return $this->friendGroupDao->create(
             [
@@ -54,27 +54,29 @@ class FriendLogic
         return $this->friendGroupDao->findFriendGroupById($friendGroupId);
     }
 
-    public function getFriendGroupByUserId(int $userId){
+    public function getFriendGroupByUserId(int $userId)
+    {
         return $this->friendGroupDao->getFriendGroupByUserId($userId);
     }
 
-    public function getFriend(){
+    public function getFriend()
+    {
         $request = context()->getRequest();
 
         $friendGroups = $this->getFriendGroupByUserId($request->user);
-        $friendGroupIds = array_column($friendGroups->toArray(),'friendGroupId');
+        $friendGroupIds = array_column($friendGroups->toArray(), 'friendGroupId');
 
 
         $friendRelations = $this->getFriendRelationByFriendGroupIds($friendGroupIds);
-        $friendRelationIds = array_column($friendRelations->toArray(),'friendId');
+        $friendRelationIds = array_column($friendRelations->toArray(), 'friendId');
 
         $users = $this->userDao->getUserByIds($friendRelationIds)->toArray();
-        $userInfos = array_column($users,null,'userId');
+        $userInfos = array_column($users, null, 'userId');
 
         $friend = [];
 
         /** @var FriendGroup $friendGroup */
-        foreach ($friendGroups as $friendGroup){
+        foreach ($friendGroups as $friendGroup) {
             $friend[$friendGroup->getFriendGroupId()] = [
                 'id' => $friendGroup->getFriendGroupId(),
                 'groupname' => $friendGroup->getFriendGroupName(),
@@ -83,7 +85,7 @@ class FriendLogic
         }
 
         /** @var FriendRelation $friendRelation */
-        foreach ($friendRelations as $friendRelation){
+        foreach ($friendRelations as $friendRelation) {
             $userInfo = $userInfos[$friendRelation->getFriendId()];
             $friend[$friendRelation->getFriendGroupId()]['list'][] = [
                 'username' => $userInfo['username'],
@@ -96,7 +98,18 @@ class FriendLogic
         return array_values($friend);
     }
 
-    public function getFriendRelationByFriendGroupIds(array $friendGroupIds){
+    public function getFriendRelationByFriendGroupIds(array $friendGroupIds)
+    {
         return $this->friendRelationDao->getFriendRelationByFriendGroupIds($friendGroupIds);
+    }
+
+    public function getRecommendedFriend(int $limit)
+    {
+        return $this->userDao->getRecommendedFriend($limit);
+    }
+
+    public function searchFriend(string $keyword, int $page, int $size)
+    {
+        return $this->userDao->searchFriend($keyword, $page, $size);
     }
 }

@@ -45,16 +45,48 @@ class FriendController
         try {
             $friendGroupName = $request->post('friend_group_name');
 
-            $friendGroupId = $this->friendLogic->createFriendGroup($request->user,$friendGroupName);
-            if (!$friendGroupId) throw new \Exception('',ApiCode::FRIEND_GROUP_CREATE_ERROR);
+            $friendGroupId = $this->friendLogic->createFriendGroup($request->user, $friendGroupName);
+            if (!$friendGroupId) throw new \Exception('', ApiCode::FRIEND_GROUP_CREATE_ERROR);
 
             $result = $this->friendLogic->findFriendGroupById($friendGroupId);
-            if (!$result) throw new \Exception('',ApiCode::FRIEND_GROUP_NOT_FOUND);
+            if (!$result) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
 
             return apiSuccess([
                 'id' => $result->getFriendGroupId(),
                 'groupname' => $result->getFriendGroupName()
             ]);
+        } catch (\Throwable $throwable) {
+            return apiError($throwable->getCode(), $throwable->getMessage());
+        }
+    }
+
+    /**
+     * @RequestMapping(route="getRecommendedFriend",method={RequestMethod::GET})
+     * @Middleware(AuthMiddleware::class)
+     */
+    public function getRecommendedFriend()
+    {
+        try {
+            $friends = $this->friendLogic->getRecommendedFriend(20);
+            return apiSuccess($friends);
+        } catch (\Throwable $throwable) {
+            return apiError($throwable->getCode(), $throwable->getMessage());
+        }
+    }
+
+    /**
+     * @RequestMapping(route="search",method={RequestMethod::POST})
+     * @Middleware(AuthMiddleware::class)
+     * @Validate(validator="SearchValidator",fields={"keyword","page","size"})
+     */
+    public function searchFriend(Request $request)
+    {
+        try {
+            $keyword = $request->parsedBody('keyword');
+            $page = $request->parsedBody('page');
+            $size = $request->parsedBody('size');
+            $friends = $this->friendLogic->searchFriend($keyword,$page,$size);
+            return apiSuccess($friends);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }

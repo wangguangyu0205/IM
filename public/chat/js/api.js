@@ -5,6 +5,8 @@ var user_login = '/user/login';
 var user_home = '/user/home';
 var user_init = '/user/init';
 var friend_create_group = '/friend/createFriendGroup';
+var friend_get_recommended = '/friend/getRecommendedFriend';
+var friend_search = '/friend/search';
 export {
   static_user_login,
   static_user_info,
@@ -12,5 +14,7 @@ export {
   user_login,
   user_home,
   user_init,
-  friend_create_group
+  friend_create_group,
+  friend_get_recommended,
+  friend_search
 };

@@ -21,7 +21,8 @@ function getRequest(url, params, callback) {
           layer.msg(data.code + ' : ' + data.msg);
           return false;
         }
-        callback && callback(data);
+        layer.msg(data.msg)
+        callback && callback(data.data);
       },
       error: function () {
         layer.closeAll('loading');
@@ -52,7 +53,8 @@ function postRequest(url, params, callback) {
           layer.msg(data.code + ' : ' + data.msg);
           return false;
         }
-        callback && callback(data);
+        layer.msg(data.msg)
+        callback && callback(data.data);
       },
       error: function () {
         layer.closeAll('loading');

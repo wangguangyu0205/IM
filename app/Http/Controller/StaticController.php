@@ -50,7 +50,7 @@ class StaticController
      */
     public function findUser(Request $request, Response $response)
     {
-        return view('friend/findUser');
+        return view('friend/find');
     }
 
     /**

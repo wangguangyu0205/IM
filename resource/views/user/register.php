@@ -58,7 +58,6 @@
   </div>
 </div>
 <script type="module">
-  import {output} from '/chat/js/util.js';
   import {static_user_login, user_register} from '/chat/js/api.js';
   import {postRequest} from '/chat/js/request.js';
 
@@ -66,7 +65,6 @@
     var form = layui.form;
     form.on('submit(register)', function (data) {
       postRequest(user_register, data.field, function (data) {
-        layer.msg(data.msg);
         setTimeout(function () {
           location.href = static_user_login;
         }, 1000);

@@ -271,7 +271,6 @@
   {{# } }}
 </script>
 </body>
-<script src="../../../../layui.js"></script>
 <script>
   layui.use(['form','laydate'], function(){
     var form = layui.form
