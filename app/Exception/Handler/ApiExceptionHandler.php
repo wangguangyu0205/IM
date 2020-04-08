@@ -40,9 +40,14 @@ class ApiExceptionHandler extends AbstractHttpErrorHandler
         Log::error($except->getMessage());
         CLog::error('%s. (At %s line %d)', $except->getMessage(), $except->getFile(), $except->getLine());
 
+        if ($except instanceof ValidatorException){
+            $code = -1;
+        }
+
         // 这里code默认为-1 因为layIm的api成功返回的code为0
         $code = ($except->getCode() == 0) ? -1 : $except->getCode();
         $message = $except->getMessage();
+
 
 
         // Debug is true
