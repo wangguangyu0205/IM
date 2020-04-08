@@ -10,7 +10,6 @@
 
   .layui-input {
     width: 300px;
-    line-height: 40px;
   }
 
   .login-main {
