@@ -52,4 +52,12 @@ class StaticController
     {
         return view('friend/findUser');
     }
+
+    /**
+     * @RequestMapping(route="userInfo",method={RequestMethod::GET})
+     */
+    public function userInfo(Request $request, Response $response)
+    {
+        return view('user/info');
+    }
 }

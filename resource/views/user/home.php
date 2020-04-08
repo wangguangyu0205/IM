@@ -10,9 +10,7 @@
         <a href="javascript:;"><img src="<?= $userInfo['avatar'] ?>" class="layui-nav-img"><?= $userInfo['username'] ?>
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="javascript:;">修改头像</a></dd>
-          <dd><a href="javascript:;">修改昵称</a></dd>
-          <dd><a href="javascript:;">修改密码</a></dd>
+          <dd><a href="javascript:;" class="userInfo">个人资料</a></dd>
         </dl>
       </li>
       <li class="layui-nav-item"><a href="/user/signOut">退出</a></li>
@@ -59,11 +57,30 @@ EOF;
 </div>
 <script type="module" src="/chat/js/init.js"></script>
 <script type="module" src="/chat/js/socket.js"></script>
-<script>
+<script type="module">
+  import {static_user_info} from '/chat/js/api.js';
+
   layui.use(['layer', 'jquery', 'element'], function () {
     var layer = layui.layer;
     var $ = layui.jquery;
     var element = layui.element;
+
+    $(".userInfo").click(function () {
+      layer.open({
+        title: '用户资料',
+        type: 2,
+        closeBtn: 1,
+        area: ['400px', '500px'],
+        id: 'userInfo',
+        maxmin: true,
+        zIndex: layer.zIndex,
+        shade: 0,
+        content: static_user_info,
+        success: function (layero) {
+          layer.setTop(layero);
+        }
+      });
+    });
 
     $(".addIframe").click(function (e) {
       let title = $(this).attr('im-title');
