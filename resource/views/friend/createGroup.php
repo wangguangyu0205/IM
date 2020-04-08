@@ -7,7 +7,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">分组名称</label>
     <div class="layui-input-block">
-      <input type="text" name="friend_group_name" style="width: auto;" lay-verify="required" autocomplete="off" placeholder="请输入好友分组名称"
+      <input type="text" name="friend_group_name" lay-verify="required" autocomplete="off" placeholder="请输入好友分组名称"
              class="layui-input">
     </div>
   </div>

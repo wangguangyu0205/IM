@@ -90,4 +90,16 @@ class UserLogic
         return $this->userDao->createUser($data);
     }
 
+    public function getMine()
+    {
+        $userInfo = context()->getRequest()->userInfo;
+        return [
+            'username' => $userInfo->getUsername(),
+            'id' => $userInfo->getUserId(),
+            'status' => User::STATUS_TEXT[$userInfo->getStatus()],
+            'sign' => $userInfo->getSign(),
+            'avatar' => $userInfo->getAvatar(),
+        ];
+    }
+
 }

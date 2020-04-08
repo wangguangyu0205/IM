@@ -23,11 +23,20 @@ class FriendGroupDao
      */
     protected $friendGroupEntity;
 
-    public function create(array $data){
+    public function create(array $data)
+    {
         return $this->friendGroupEntity::insertGetId($data);
     }
 
-    public function findFriendGroupById(int $friendGroupId){
-        return $this->friendGroupEntity::find($friendGroupId);
+    public function findFriendGroupById(int $friendGroupId)
+    {
+        return $this->friendGroupEntity::whereNull('deleted_at')->find($friendGroupId);
+    }
+
+    public function getFriendGroupByUserId(int $userId)
+    {
+        return $this->friendGroupEntity::whereNull('deleted_at')
+            ->where('user_id', '=', $userId)
+            ->get();
     }
 }

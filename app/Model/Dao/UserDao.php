@@ -34,4 +34,10 @@ class UserDao
     public function createUser(array $data){
         return $this->userEntity::insert($data);
     }
+
+    public function getUserByIds(array $ids){
+        return $this->userEntity::whereNull('deleted_at')
+            ->whereIn('user_id',$ids)
+            ->get();
+    }
 }

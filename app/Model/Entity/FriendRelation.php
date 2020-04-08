@@ -19,6 +19,12 @@ use Swoft\Db\Eloquent\Model;
  */
 class FriendRelation extends Model
 {
+
+    const STATUS_TEXT = [
+        'offline',
+        'online'
+    ];
+
     /**
      * 主键
      * @Id()
@@ -56,7 +62,7 @@ class FriendRelation extends Model
     private $friendGroupId;
 
     /**
-     * 
+     *
      *
      * @Column(name="created_at", prop="createdAt")
      *
@@ -65,7 +71,7 @@ class FriendRelation extends Model
     private $createdAt;
 
     /**
-     * 
+     *
      *
      * @Column(name="updated_at", prop="updatedAt")
      *

@@ -7,6 +7,10 @@
 namespace App\Model\Logic;
 
 use App\Model\Dao\FriendGroupDao;
+use App\Model\Dao\FriendRelationDao;
+use App\Model\Dao\UserDao;
+use App\Model\Entity\FriendGroup;
+use App\Model\Entity\FriendRelation;
 use Swoft\Bean\Annotation\Mapping\Bean;
 use Swoft\Bean\Annotation\Mapping\Inject;
 
@@ -23,6 +27,18 @@ class FriendLogic
      */
     protected $friendGroupDao;
 
+    /**
+     * @Inject()
+     * @var FriendRelationDao
+     */
+    protected $friendRelationDao;
+
+    /**
+     * @Inject()
+     * @var UserDao
+     */
+    protected $userDao;
+
     public function createFriendGroup(int $userId, string $friendGroupName):int
     {
         return $this->friendGroupDao->create(
@@ -36,5 +52,51 @@ class FriendLogic
     public function findFriendGroupById(int $friendGroupId)
     {
         return $this->friendGroupDao->findFriendGroupById($friendGroupId);
+    }
+
+    public function getFriendGroupByUserId(int $userId){
+        return $this->friendGroupDao->getFriendGroupByUserId($userId);
+    }
+
+    public function getFriend(){
+        $request = context()->getRequest();
+
+        $friendGroups = $this->getFriendGroupByUserId($request->user);
+        $friendGroupIds = array_column($friendGroups->toArray(),'friendGroupId');
+
+
+        $friendRelations = $this->getFriendRelationByFriendGroupIds($friendGroupIds);
+        $friendRelationIds = array_column($friendRelations->toArray(),'friendId');
+
+        $users = $this->userDao->getUserByIds($friendRelationIds)->toArray();
+        $userInfos = array_column($users,null,'userId');
+
+        $friend = [];
+
+        /** @var FriendGroup $friendGroup */
+        foreach ($friendGroups as $friendGroup){
+            $friend[$friendGroup->getFriendGroupId()] = [
+                'id' => $friendGroup->getFriendGroupId(),
+                'groupname' => $friendGroup->getFriendGroupName(),
+                'list' => []
+            ];
+        }
+
+        /** @var FriendRelation $friendRelation */
+        foreach ($friendRelations as $friendRelation){
+            $userInfo = $userInfos[$friendRelation->getFriendId()];
+            $friend[$friendRelation->getFriendGroupId()]['list'][] = [
+                'username' => $userInfo['username'],
+                'id' => $userInfo['userId'],
+                'avatar' => $userInfo['avatar'],
+                'sign' => $userInfo['sign'],
+                'status' => FriendRelation::STATUS_TEXT[$userInfo['status']],
+            ];
+        }
+        return array_values($friend);
+    }
+
+    public function getFriendRelationByFriendGroupIds(array $friendGroupIds){
+        return $this->friendRelationDao->getFriendRelationByFriendGroupIds($friendGroupIds);
     }
 }

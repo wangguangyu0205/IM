@@ -13,6 +13,7 @@ namespace App\Http\Controller;
 use App\Helper\AuthHelper;
 use App\Helper\JwtHelper;
 use App\Model\Entity\User;
+use App\Model\Logic\FriendLogic;
 use App\Model\Logic\UserLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
@@ -41,6 +42,11 @@ class UserController
      */
     protected $userLogic;
 
+    /**
+     * @Inject()
+     * @var FriendLogic
+     */
+    protected $friendLogic;
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
@@ -109,15 +115,9 @@ class UserController
     public function userInit(Request $request)
     {
         try {
-            $userInfo = $request->userInfo;
-            $mine = [
-                'username' => $userInfo->getUsername(),
-                'id' => $userInfo->getUserId(),
-                'status' => User::STATUS_TEXT[$userInfo->getStatus()],
-                'sign' => $userInfo->getSign(),
-                'avatar' => $userInfo->getAvatar(),
-            ];
-            return apiSuccess(['mine' => $mine]);
+            $mine = $this->userLogic->getMine();
+            $friend = $this->friendLogic->getFriend();
+            return apiSuccess(['mine' => $mine,'friend' => $friend]);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }
