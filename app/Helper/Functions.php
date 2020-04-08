@@ -32,7 +32,7 @@ if (!function_exists('apiSuccess')) {
             'msg' => $msg,
             'data' => $data
         ];
-        return context()->getResponse()->withData($result);
+        return context()->getResponse()->withStatus(200)->withData($result);
     }
 }
 
@@ -53,7 +53,7 @@ if (!function_exists('apiError')) {
             'code' => $code,
             'msg' => $msg,
         ];
-        return context()->getResponse()->withData($result);
+        return context()->getResponse()->withStatus(200)->withData($result);
     }
 }
 
@@ -79,7 +79,7 @@ if (!function_exists('throwApiException')) {
                 'trace' => $trace
             ]);
         }
-        return context()->getResponse()->withData($result);
+        return context()->getResponse()->withStatus(200)->withData($result);
     }
 }
 
@@ -97,7 +97,7 @@ if (!function_exists('checkAuth')) {
         }
         $request->user = $userId;
         $request->userInfo = $userInfo;
-        
+
         return $userId;
     }
 }
