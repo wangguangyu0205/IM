@@ -6,8 +6,11 @@ namespace App\Http\Controller;
 use App\Model\Logic\GroupLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
+use Swoft\Http\Server\Annotation\Mapping\Middleware;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
+use App\Http\Middleware\AuthMiddleware;
+use Swoft\Validator\Annotation\Mapping\Validate;
 use Swoft\Http\Server\Annotation\Mapping\Controller;
 
 /**
