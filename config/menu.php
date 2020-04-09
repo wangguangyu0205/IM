@@ -21,5 +21,17 @@ return [
                 'height' => '520px',
             ]
         ]
+    ],
+    [
+        'title' => '群管理',
+        'child' => [
+            [
+                'title' => '创建群',
+                'id' => 'createGroup',
+                'url' => '/static/createGroup',
+                'width' => '550px',
+                'height' => '420px',
+            ]
+        ]
     ]
 ];

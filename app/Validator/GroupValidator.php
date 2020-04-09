@@ -1,8 +1,4 @@
-<?php
-/**
- * @author gaobinzhan <gaobinzhan@gmail.com>
- */
-
+<?php declare(strict_types=1);
 
 namespace App\Validator;
 
@@ -42,13 +38,13 @@ class GroupValidator
      * @IsString()
      * @Required()
      * @NotEmpty()
-     * @Length(max=30)
+     * @Length(max=255)
      * @var string
      */
     protected $avatar = '';
 
     /**
-     * @IsString()
+     * @IsInt()
      * @Required()
      * @NotEmpty()
      * @Enum(values={"200","500","1000"})
@@ -60,6 +56,7 @@ class GroupValidator
      * @IsString()
      * @Required()
      * @NotEmpty()
+     * @Length(max=255)
      * @var string
      */
     protected  $introduction = '';

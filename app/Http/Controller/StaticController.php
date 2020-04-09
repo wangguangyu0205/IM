@@ -46,6 +46,14 @@ class StaticController
     }
 
     /**
+     * @RequestMapping(route="createGroup",method={RequestMethod::GET})
+     */
+    public function createGroup(Request $request, Response $response)
+    {
+        return view('group/create');
+    }
+
+    /**
      * @RequestMapping(route="findUser",method={RequestMethod::GET})
      */
     public function findUser(Request $request, Response $response)
