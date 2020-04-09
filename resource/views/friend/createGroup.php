@@ -101,8 +101,7 @@
     var form = layui.form;
     form.on('submit(createFriendGroup)', function (data) {
       postRequest(friend_create_group, data.field, function (data) {
-        layer.msg(data.msg);
-        addFriendGroup(data.data);
+        addFriendGroup(data);
         setTimeout(function () {
           let index = parent.layer.getFrameIndex(window.name);
           parent.layer.close(index);

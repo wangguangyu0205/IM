@@ -29,6 +29,7 @@ class UserApplication extends BaseMigration
             $blueprint->increments('user_application_id')->comment('主键');
             $blueprint->integer('user_id', false, true, 11)->comment('申请方');
             $blueprint->integer('receiver_id', false, true, 11)->comment('接收方');
+            $blueprint->integer('group_id', false, true, 11)->comment('好友分组id || 群id');
             $blueprint->enum('application_type', ['friend', 'group'])->comment('申请类型 好友 ｜ 群');
             $blueprint->tinyInteger('application_status', false, true, 1)->default(0)->comment('申请状态 0创建 1同意 2拒绝');
             $blueprint->string('application_reason', 255)->default('')->comment('申请原因');

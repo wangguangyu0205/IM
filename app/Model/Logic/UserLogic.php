@@ -7,9 +7,11 @@
 namespace App\Model\Logic;
 
 use App\ExceptionCode\ApiCode;
+use App\Model\Dao\UserApplicationDao;
 use App\Model\Dao\UserDao;
 use App\Model\Dao\UserLoginLogDao;
 use App\Model\Entity\User;
+use App\Model\Entity\UserApplication;
 use Swoft\Bean\Annotation\Mapping\Bean;
 use Swoft\Bean\Annotation\Mapping\Inject;
 
@@ -32,6 +34,12 @@ class UserLogic
      */
     protected $userLoginLogDao;
 
+    /**
+     * @Inject()
+     * @var UserApplicationDao
+     */
+    protected $userApplicationDao;
+
     public function findUserInfoById(int $userId)
     {
         return $this->userDao->findUserInfoById($userId);
@@ -50,7 +58,7 @@ class UserLogic
                 'password' => password_hash($password, CRYPT_BLOWFISH),
                 'sign' => '',
                 'status' => User::STATUS_OFFLINE,
-                'avatar' => 'https://s.gravatar.com/avatar/'.md5(strtolower(trim($email))),
+                'avatar' => 'https://s.gravatar.com/avatar/' . md5(strtolower(trim($email))),
             ]
         );
 
@@ -100,6 +108,18 @@ class UserLogic
             'sign' => $userInfo->getSign(),
             'avatar' => $userInfo->getAvatar(),
         ];
+    }
+
+    public function createUserApplication(int $userId, int $receiverId, int $groupId, string $applicationType, string $applicationReason)
+    {
+        return $this->userApplicationDao->createUserApplication([
+            'user_id' => $userId,
+            'receiver_id' => $receiverId,
+            'group_id' => $groupId,
+            'application_type' => $applicationType,
+            'application_status' => UserApplication::APPLICATION_STATUS_CREATE,
+            'application_reason' => $applicationReason,
+        ]);
     }
 
 }

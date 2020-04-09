@@ -80,12 +80,12 @@
 			<div class="layui-row ">
 					{{#  layui.each(d.data, function(index, item){ }}
 					<div class="layui-col-xs3 layui-find-list">
-						<li layim-event="add" data-type="friend" data-index="0" data-uid="{{ item.userId }}"
+						<li layim-event="add" data-index="0" data-uid="{{ item.userId }}"
                 data-name="{{item.username}}">
 							<img src="{{item.avatar}}">
 							<span>{{item.username}}({{item.email}})</span>
 							<p>{{item.sign}}  {{#  if(item.sign == ''){ }}我很懒，懒得写签名{{#  } }} </p>
-							<button class="layui-btn layui-btn-mini btncolor add" data-type="friend"><i
+							<button class="layui-btn layui-btn-mini add"><i
                   class="layui-icon">&#xe654;</i>加好友</button>
 						</li>
 					</div>
@@ -98,7 +98,7 @@
 
 </div>
 <script type="module">
-  import {friend_get_recommended, friend_search} from '/chat/js/api.js';
+  import {friend_get_recommended, friend_search, friend_apply} from '/chat/js/api.js';
   import {getRequest, postRequest} from '/chat/js/request.js';
 
   layui.use(['layim', 'laypage', 'form', 'flow'], function () {
@@ -129,7 +129,7 @@
       $("#LAY_page").css("display", "block");
       var keyword = data.field.keyword;
 
-      postRequest(friend_search, {keyword: keyword,page:1,size:20}, function (data) {
+      postRequest(friend_search, {keyword: keyword, page: 1, size: 20}, function (data) {
         laypage.render({
           elem: 'LAY_page'
           , count: data.count
@@ -139,8 +139,9 @@
           , layout: ['prev', 'next', 'count']
           , curr: 1
           , jump: function (obj, first) {
+            if (first) return false;
             let page = obj.curr;
-            postRequest(friend_search, {keyword: keyword,page:page,size:20}, function (data) {
+            postRequest(friend_search, {keyword: keyword, page: page, size: 20}, function (data) {
               var html = laytpl(LAY_tpl.value).render({
                 data: data.list,
                 legend: '<a class="back"><i class="layui-icon">&#xe65c;</i>返回</a> 查找结果',
@@ -154,16 +155,31 @@
     });
 
     $('body').on('click', '.add', function () {//添加好友
-      var othis = $(this), type = othis.data('type');
-      //弹出添加好友框
-      // parent.layui.im.addFriendGroup(othis,type);
+      var li = $(this).parents('li');
+      var username = li.attr('data-name');
+      var receiver_id = li.attr('data-uid');
+      var avatar = li.find("img").attr('src');
+      parent.layui.layim.add({
+        type: 'friend'
+        , username: username
+        , avatar: avatar
+        , submit: function (group, remark, index) {
+          postRequest(friend_apply, {
+              receiver_id: receiver_id,
+              group_id: group,
+              application_type: 'friend',
+              application_reason: remark
+            }, function (data) {
+              parent.layer.close(index);
+            },
+            function (data, msg) {
+              parent.layer.close(index);
+            }
+          );
+        }
+      });
     });
-    //下一篇分享创建群的html
-    // $('body').on('click', '.createGroup', function () {//创建群
-    //     var othis = $(this);
-    //     parent.layui.im.createGroup(othis);
-    // });
-    $('body').on('click', '.back', function () {//返回推荐好友
+    $('body').on('click', '.back', function () {
       getRecommend();
       $("#LAY_page").css("display", "none");
     });

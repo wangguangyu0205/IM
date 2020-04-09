@@ -23,10 +23,13 @@ class ApiCode
         USER_NOT_FOUND = 3001,
         USER_ID_INVALID = 3002,
         USER_EMAIL_ALREADY_USE = 3003,
-        USER_PASSWORD_ERROR = 3004;
+        USER_PASSWORD_ERROR = 3004,
+        USER_CREATE_APPLICATION_FAIL = 3005;
 
-    const FRIEND_GROUP_CREATE_ERROR = 4001,
-        FRIEND_GROUP_NOT_FOUND = 4002;
+    const FRIEND_GROUP_CREATE_FAIL = 4001,
+        FRIEND_GROUP_NOT_FOUND = 4002,
+        FRIEND_NOT_FOUND = 4003,
+        FRIEND_NOT_ADD_SELF = 4004;
 
     // ext 9000~9999
     const
@@ -44,14 +47,17 @@ class ApiCode
         self::USER_ID_INVALID => 'The user id is invalid !',
         self::USER_EMAIL_ALREADY_USE => 'This mailbox is already in use !',
         self::USER_PASSWORD_ERROR => 'User password input error !',
+        self::USER_CREATE_APPLICATION_FAIL => 'Failed to create user application !',
 
-        self::FRIEND_GROUP_CREATE_ERROR => 'Friend group creation failed !',
+
+        self::FRIEND_GROUP_CREATE_FAIL => 'Friend group creation failed !',
         self::FRIEND_GROUP_NOT_FOUND => 'Friend group not found !',
+        self::FRIEND_NOT_FOUND => 'Friend not found!',
+        self::FRIEND_NOT_ADD_SELF => 'You can\'t add yourself as a friend !',
 
         self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid !',
         self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid !',
         self::JWT_ALG_EMPTY => 'The alg is invalid !',
-
 
 
     ];
