@@ -153,13 +153,12 @@
 
       })
     });
-
-    $('body').on('click', '.add', function () {//添加好友
+    $('body').on('click', '.add', function () {
       var li = $(this).parents('li');
       var username = li.attr('data-name');
       var receiver_id = li.attr('data-uid');
       var avatar = li.find("img").attr('src');
-      parent.layui.layim.add({
+      layui.layim.add({
         type: 'friend'
         , username: username
         , avatar: avatar
@@ -170,10 +169,7 @@
               application_type: 'friend',
               application_reason: remark
             }, function (data) {
-              parent.layer.close(index);
-            },
-            function (data, msg) {
-              parent.layer.close(index);
+              layer.close(index);
             }
           );
         }
@@ -182,12 +178,6 @@
     $('body').on('click', '.back', function () {
       getRecommend();
       $("#LAY_page").css("display", "none");
-    });
-
-    $("body").keydown(function (event) {
-      if (event.keyCode == 13) {
-        $(".find").click();
-      }
     });
   })
   ;

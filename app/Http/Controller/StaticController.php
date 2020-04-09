@@ -60,4 +60,20 @@ class StaticController
     {
         return view('user/info');
     }
+
+    /**
+     * @RequestMapping(route="application",method={RequestMethod::GET})
+     */
+    public function msgBox()
+    {
+        return view('user/application');
+    }
+
+    /**
+     * @RequestMapping(route="history",method={RequestMethod::GET})
+     */
+    public function chatLog()
+    {
+        return view('user/history');
+    }
 }

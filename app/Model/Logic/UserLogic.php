@@ -7,6 +7,7 @@
 namespace App\Model\Logic;
 
 use App\ExceptionCode\ApiCode;
+use App\Model\Dao\FriendGroupDao;
 use App\Model\Dao\UserApplicationDao;
 use App\Model\Dao\UserDao;
 use App\Model\Dao\UserLoginLogDao;
@@ -27,6 +28,12 @@ class UserLogic
      * @var UserDao
      */
     protected $userDao;
+
+    /**
+     * @Inject()
+     * @var FriendGroupDao
+     */
+    protected $friendGroupDao;
 
     /**
      * @Inject()
@@ -110,6 +117,22 @@ class UserLogic
         ];
     }
 
+    public function apply(int $userId, int $receiverId, int $groupId, string $applicationType, string $applicationReason)
+    {
+        if ($userId == $receiverId) throw new \Exception('', ApiCode::FRIEND_NOT_ADD_SELF);
+
+        $friendInfo = $this->findUserInfoById($receiverId);
+        if (!$friendInfo) throw new \Exception('', ApiCode::FRIEND_NOT_FOUND);
+
+        $friendGroupInfo = $this->friendGroupDao->findFriendGroupById($groupId);
+        if (!$friendGroupInfo) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
+
+        $result = $this->createUserApplication($userId, $receiverId, $groupId, $applicationType, $applicationReason);
+        if (!$result) throw new \Exception('', ApiCode::USER_CREATE_APPLICATION_FAIL);
+
+        return $result;
+    }
+
     public function createUserApplication(int $userId, int $receiverId, int $groupId, string $applicationType, string $applicationReason)
     {
         return $this->userApplicationDao->createUserApplication([
@@ -119,7 +142,42 @@ class UserLogic
             'application_type' => $applicationType,
             'application_status' => UserApplication::APPLICATION_STATUS_CREATE,
             'application_reason' => $applicationReason,
+            'read_state' => UserApplication::UNREAD
         ]);
+    }
+
+    public function getUnreadApplicationCount(int $userId)
+    {
+        return $this->userApplicationDao->getUnreadApplicationCount($userId);
+    }
+
+    public function getApplication(int $userId, int $page, int $size)
+    {
+        $applications = $this->userApplicationDao->getApplication($userId, $page, $size);
+        $result = [];
+        /** @var UserApplication $application */
+        foreach ($applications['list'] as $application) {
+
+            $applicationRole = ($userId == $application['userId'])
+                ? (($application['applicationStatus'] != UserApplication::APPLICATION_STATUS_CREATE)
+                    ? $applicationRole = UserApplication::APPLICATION_SYSTEM
+                    : UserApplication::APPLICATION_CREATE_USER)
+                : UserApplication::APPLICATION_RECEIVER_USER;
+
+            $result[] = [
+                'user_id' => $application['userId'],
+                'receiver_id' => $application['receiverId'],
+                'application_role' => $applicationRole,
+                'application_type' => $application['applicationType'],
+                'created_at' => $application['createdAt'],
+                'updated_at' => $application['updatedAt'],
+                'application_status' => $application['applicationStatus'],
+                'application_status_text' => UserApplication::APPLICATION_STATUS_TEXT[$application['applicationStatus']],
+                'application_reason' => $application['applicationReason']
+            ];
+        }
+        $applications['list'] = $result;
+        return $applications;
     }
 
 }

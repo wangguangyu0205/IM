@@ -33,6 +33,7 @@ class UserApplication extends BaseMigration
             $blueprint->enum('application_type', ['friend', 'group'])->comment('申请类型 好友 ｜ 群');
             $blueprint->tinyInteger('application_status', false, true, 1)->default(0)->comment('申请状态 0创建 1同意 2拒绝');
             $blueprint->string('application_reason', 255)->default('')->comment('申请原因');
+            $blueprint->tinyInteger('read_state',false,true,1)->default(0)->comment('读取状态 0 未读 1 已读');
             $blueprint->timestamps();
 //            $blueprint->tinyInteger('delete_flag', false, true, 1)->default(0)->comment('软删除 0正常 1删除');
             $blueprint->softDeletes()->comment('删除时间 为NULL未删除');

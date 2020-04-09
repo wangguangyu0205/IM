@@ -19,7 +19,18 @@ use Swoft\Db\Eloquent\Model;
  */
 class UserApplication extends Model
 {
+    const UNREAD = 0;
     const APPLICATION_STATUS_CREATE = 0;
+
+    const APPLICATION_STATUS_TEXT = [
+        '等待验证',
+        '已同意',
+        '已拒绝'
+    ];
+
+    const APPLICATION_CREATE_USER  = 'create';
+    const APPLICATION_RECEIVER_USER  = 'receiver';
+    const APPLICATION_SYSTEM = 'system';
 
     /**
      * 主键
@@ -83,6 +94,15 @@ class UserApplication extends Model
      * @var string
      */
     private $applicationReason;
+
+    /**
+     * 读取状态 0 未读 1 已读
+     *
+     * @Column(name="read_state", prop="readState")
+     *
+     * @var int
+     */
+    private $readState;
 
     /**
      *
@@ -197,6 +217,18 @@ class UserApplication extends Model
     }
 
     /**
+     * @param int $readState
+     *
+     * @return self
+     */
+    public function setReadState(int $readState): self
+    {
+        $this->readState = $readState;
+
+        return $this;
+    }
+
+    /**
      * @param string|null $createdAt
      *
      * @return self
@@ -286,6 +318,14 @@ class UserApplication extends Model
     public function getApplicationReason(): ?string
     {
         return $this->applicationReason;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReadState(): ?int
+    {
+        return $this->readState;
     }
 
     /**

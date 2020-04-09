@@ -117,27 +117,41 @@ class UserController
         try {
             $mine = $this->userLogic->getMine();
             $friend = $this->friendLogic->getFriend();
-            return apiSuccess(['mine' => $mine,'friend' => $friend]);
+            return apiSuccess(['mine' => $mine, 'friend' => $friend]);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }
     }
 
     /**
-     * @RequestMapping(route="msgBox",method={RequestMethod::GET})
-     * @View(template="user/msgbox")
+     * @RequestMapping(route="getUnreadApplicationCount",method={RequestMethod::GET})
+     * @Middleware(AuthMiddleware::class)
      */
-    public function msgBox()
+    public function getUnreadApplicationCount(Request $request)
     {
-        return [];
+        try {
+            $count = $this->userLogic->getUnreadApplicationCount($request->user);
+            return apiSuccess($count);
+        } catch (\Throwable $throwable) {
+            return apiError($throwable->getCode(), $throwable->getMessage());
+        }
     }
 
     /**
-     * @RequestMapping(route="chatLog",method={RequestMethod::GET})
-     * @View(template="user/chatlog")
+     * @RequestMapping(route="getApplication",method={RequestMethod::POST})
+     * @Validate(validator="SearchValidator",fields={"page","size"})
+     * @Middleware(AuthMiddleware::class)
      */
-    public function chatLog()
+    public function getApplication(Request $request)
     {
-        return [];
+        try {
+            $page = $request->parsedBody('page');
+            $size = $request->parsedBody('size');
+            $result = $this->userLogic->getApplication($request->user, $page, $size);
+            return apiSuccess($result);
+        } catch (\Throwable $throwable) {
+            return apiError($throwable->getCode(), $throwable->getMessage());
+        }
     }
+
 }

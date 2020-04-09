@@ -1,10 +1,15 @@
-import {user_init} from "./api.js";
+import {
+  user_init,
+  static_user_application,
+  static_user_chat_history,
+  user_get_unread_application_count
+} from "./api.js";
 import {output, getCookie} from "./util.js";
+import {getRequest} from "./request.js";
 
 layui.use('layim', function (layim) {
   //基础配置
   layim.config({
-
     init: {
       url: user_init,
       type: 'get',
@@ -20,17 +25,6 @@ layui.use('layim', function (layim) {
       , data: {} //额外参数
     }
 
-    //上传图片接口（返回的数据格式见下文），若不开启图片上传，剔除该项即可
-    , uploadImage: {
-      url: '' //接口地址
-      , type: 'post' //默认post
-    }
-
-    //上传文件接口（返回的数据格式见下文），若不开启文件上传，剔除该项即可
-    , uploadFile: {
-      url: '' //接口地址
-      , type: 'post' //默认post
-    }
     //扩展工具栏，下文会做进一步介绍（如果无需扩展，剔除该项即可）
     , tool: [{
       alias: 'code' //工具别名
@@ -38,10 +32,15 @@ layui.use('layim', function (layim) {
       , icon: '&#xe64e;' //工具图标，参考图标文档
     }]
 
-    , msgbox: '/user/msgBox' //消息盒子页面地址，若不开启，剔除该项即可、
-    , chatLog: '/user/chatLog' //聊天记录页面地址，若不开启，剔除该项即可
+    , msgbox: static_user_application
+    , chatLog: static_user_chat_history
   });
   layim.on('ready', function (options) {
-    layim.msgbox(5);
+    getRequest(user_get_unread_application_count, {}, function (count) {
+      if (count == 0) {
+        return false;
+      }
+      layim.msgbox(count)
+    })
   });
 });

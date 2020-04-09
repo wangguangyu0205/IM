@@ -9,6 +9,7 @@ namespace App\Model\Dao;
 use App\Model\Entity\UserApplication;
 use Swoft\Bean\Annotation\Mapping\Bean;
 use Swoft\Bean\Annotation\Mapping\Inject;
+use Swoft\Db\Eloquent\Builder;
 
 /**
  * Class UserApplicationDao
@@ -27,5 +28,27 @@ class UserApplicationDao
     public function createUserApplication($data)
     {
         return $this->userApplicationEntity::insertGetId($data);
+    }
+
+    public function getUnreadApplicationCount(int $userId)
+    {
+        return $this->userApplicationEntity::whereNull('deleted_at')
+            ->where('read_state', 'eq', $this->userApplicationEntity::UNREAD)
+            ->where(function (Builder $builder) use ($userId) {
+                $builder->where('user_id', '=', $userId);
+                $builder->orWhere('receiver_id', '=', $userId);
+            })
+            ->count();
+    }
+
+    public function getApplication(int $userId, int $page, int $size)
+    {
+        return $this->userApplicationEntity::whereNull('deleted_at')
+            ->where('read_state', 'eq', $this->userApplicationEntity::UNREAD)
+            ->where(function (Builder $builder) use ($userId) {
+                $builder->where('user_id', '=', $userId);
+                $builder->orWhere('receiver_id', '=', $userId);
+            })
+            ->paginate($page, $size);
     }
 }

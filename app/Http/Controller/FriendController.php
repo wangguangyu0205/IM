@@ -92,7 +92,7 @@ class FriendController
             $keyword = $request->parsedBody('keyword');
             $page = $request->parsedBody('page');
             $size = $request->parsedBody('size');
-            $friends = $this->friendLogic->searchFriend($keyword,$page,$size);
+            $friends = $this->friendLogic->searchFriend($keyword, $page, $size);
             return apiSuccess($friends);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
@@ -104,27 +104,17 @@ class FriendController
      * @Middleware(AuthMiddleware::class)
      * @Validate(validator="FriendValidator",fields={"receiver_id","group_id","application_type","application_reason"})
      */
-    public function apply(Request $request){
+    public function apply(Request $request)
+    {
         try {
             $userId = $request->user;
             $receiverId = $request->parsedBody('receiver_id');
-            $groupId= $request->parsedBody('group_id');
-            $applicationType= $request->parsedBody('application_type');
-            $applicationReason= $request->parsedBody('application_reason');
-
-            if ($userId == $receiverId) throw new \Exception('',ApiCode::FRIEND_NOT_ADD_SELF);
-
-            $friendInfo = $this->userLogic->findUserInfoById($receiverId);
-            if (!$friendInfo) throw new \Exception('',ApiCode::FRIEND_NOT_FOUND);
-
-            $friendGroupInfo = $this->friendLogic->findFriendGroupById($groupId);
-            if (!$friendGroupInfo) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
-
-            $result = $this->userLogic->createUserApplication($userId,$receiverId,$groupId,$applicationType,$applicationReason);
-            if (!$result) throw new \Exception('',ApiCode::USER_CREATE_APPLICATION_FAIL);
-
+            $groupId = $request->parsedBody('group_id');
+            $applicationType = $request->parsedBody('application_type');
+            $applicationReason = $request->parsedBody('application_reason');
+            $this->userLogic->apply($userId, $receiverId, $groupId, $applicationType, $applicationReason);
             return apiSuccess();
-        }catch (\Throwable $throwable){
+        } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }
     }
