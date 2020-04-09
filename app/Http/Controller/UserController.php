@@ -55,8 +55,8 @@ class UserController
     public function login(Request $request, Response $response)
     {
         try {
-            $email = $request->post('email');
-            $password = $request->post('password');
+            $email = $request->parsedBody('email');
+            $password = $request->parsedBody('password');
             $userInfo = $this->userLogic->login($email, $password);
             $token = JwtHelper::encrypt($userInfo['userId']);
             $this->userLogic->createUserLoginLog($userInfo['userId']);
@@ -76,8 +76,8 @@ class UserController
     public function register(Request $request)
     {
         try {
-            $email = $request->post('email');
-            $password = $request->post('password');
+            $email = $request->parsedBody('email');
+            $password = $request->parsedBody('password');
             $this->userLogic->register($email, $password);
             return apiSuccess();
         } catch (\Throwable $throwable) {

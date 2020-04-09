@@ -50,7 +50,7 @@ class UserLogic
                 'password' => password_hash($password, CRYPT_BLOWFISH),
                 'sign' => '',
                 'status' => User::STATUS_OFFLINE,
-                'avatar' => User::DEFAULT_AVATAR,
+                'avatar' => 'https://s.gravatar.com/avatar/'.md5(strtolower(trim($email))),
             ]
         );
 
