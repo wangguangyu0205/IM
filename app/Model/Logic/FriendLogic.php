@@ -6,6 +6,7 @@
 
 namespace App\Model\Logic;
 
+use App\ExceptionCode\ApiCode;
 use App\Model\Dao\FriendGroupDao;
 use App\Model\Dao\FriendRelationDao;
 use App\Model\Dao\UserDao;
@@ -39,14 +40,20 @@ class FriendLogic
      */
     protected $userDao;
 
-    public function createFriendGroup(int $userId, string $friendGroupName): int
+    public function createFriendGroup(int $userId, string $friendGroupName)
     {
-        return $this->friendGroupDao->create(
+        $friendGroupId = $this->friendGroupDao->create(
             [
                 'user_id' => $userId,
                 'friend_group_name' => $friendGroupName
             ]
         );
+        if (!$friendGroupId) throw new \Exception('', ApiCode::FRIEND_GROUP_CREATE_FAIL);
+
+        $result = $this->findFriendGroupById($friendGroupId);
+        if (!$result) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
+
+        return $result;
     }
 
     public function findFriendGroupById(int $friendGroupId)

@@ -80,6 +80,7 @@ class UserLogic
         if (!password_verify($password, $userInfo['password'])) {
             throw new \Exception('', ApiCode::USER_PASSWORD_ERROR);
         }
+        $this->createUserLoginLog($userInfo->getUserId());
 
         return $userInfo->toArray();
     }

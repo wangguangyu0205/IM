@@ -10,7 +10,6 @@
 
 namespace App\Http\Controller;
 
-use App\ExceptionCode\ApiCode;
 use App\Model\Logic\FriendLogic;
 use App\Model\Logic\UserLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
@@ -50,13 +49,10 @@ class FriendController
     public function createFriendGroup(Request $request)
     {
         try {
-            $friendGroupName = $request->post('friend_group_name');
+            $friendGroupName = $request->parsedBody('friend_group_name');
 
-            $friendGroupId = $this->friendLogic->createFriendGroup($request->user, $friendGroupName);
-            if (!$friendGroupId) throw new \Exception('', ApiCode::FRIEND_GROUP_CREATE_FAIL);
+            $result = $this->friendLogic->createFriendGroup($request->user, $friendGroupName);
 
-            $result = $this->friendLogic->findFriendGroupById($friendGroupId);
-            if (!$result) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
 
             return apiSuccess([
                 'id' => $result->getFriendGroupId(),

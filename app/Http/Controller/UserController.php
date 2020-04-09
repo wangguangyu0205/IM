@@ -15,7 +15,6 @@ use Swoft\Http\Server\Annotation\Mapping\Middleware;
 use Swoft\Http\Server\Annotation\Mapping\RequestMapping;
 use Swoft\Http\Server\Annotation\Mapping\RequestMethod;
 use Swoft\Validator\Annotation\Mapping\Validate;
-use Swoft\View\Annotation\Mapping\View;
 use App\Http\Middleware\AuthMiddleware;
 use function view;
 
@@ -52,7 +51,6 @@ class UserController
             $password = $request->parsedBody('password');
             $userInfo = $this->userLogic->login($email, $password);
             $token = JwtHelper::encrypt($userInfo['userId']);
-            $this->userLogic->createUserLoginLog($userInfo['userId']);
             return $response->withCookie('IM_TOKEN', [
                 'value' => $token,
                 'path' => '/',
