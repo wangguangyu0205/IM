@@ -5,6 +5,7 @@ namespace App\Model\Logic;
 use App\ExceptionCode\ApiCode;
 use App\Model\Dao\GroupDao;
 use App\Model\Dao\GroupRelationDao;
+use App\Model\Dao\UserDao;
 use Swoft\Bean\Annotation\Mapping\Bean;
 use Swoft\Bean\Annotation\Mapping\Inject;
 
@@ -21,21 +22,28 @@ class GroupLogic
      */
     protected $groupDao;
 
+
     /**
      * @Inject()
      * @var GroupRelationDao
      */
     protected $groupRelationDao;
 
+    /**
+     * @Inject()
+     * @var UserDao
+     */
+    protected $userDao;
+
     public function createGroup(int $userId, string $groupName, string $avatar, int $size, string $introduction, int $validation)
     {
         $groupId = $this->groupDao->create([
             'user_id' => $userId,
-            'group_name' => $groupName,
-            'avatar' => $avatar,
-            'size' => $size,
-            'introduction' => $introduction,
-            'validation' => $validation
+            'group_name'=>$groupName,
+            'avatar'=>$avatar,
+            'size'=>$size,
+            'introduction'=>$introduction,
+            'validation'=>$validation
         ]);
         if (!$groupId) throw new \Exception('', ApiCode::GROUP_CREATE_FAIL);
 
@@ -59,5 +67,23 @@ class GroupLogic
             'user_id' => $userId,
             'group_id' => $groupId
         ]);
+    }
+
+    public function getGroupRelation($groupId)
+    {
+        $group = $this->groupDao->findGroupById($groupId);
+        if (!$group) throw new \Exception('', ApiCode::GROUP_NOT_FOUND);
+
+        $groupRelationUserId = $this->groupRelationDao->findGroupRelationByGroupId($groupId);
+
+        $groupRelationUserInfo = $this->userDao->getUserByIds($groupRelationUserId);
+        $data = [];
+        foreach ($groupRelationUserInfo as $k=>$v){
+                $data['list'][$k]['username'] = $v['username'];
+                $data['list'][$k]['id'] = $v['user_id'];
+                $data['list'][$k]['avatar'] = $v['avatar'];
+                $data['list'][$k]['sign'] = $v['sign'];
+        }
+        return $data;
     }
 }

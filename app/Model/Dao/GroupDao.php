@@ -24,6 +24,7 @@ class GroupDao
         return $this->groupEntity::whereNull('deleted_at')->find($groupId);
     }
 
+
     public function create(array $data)
     {
         return $this->groupEntity::insertGetId($data);

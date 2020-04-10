@@ -27,9 +27,9 @@ class GroupController
     protected $groupLogic;
 
     /**
-     * @RequestMapping(route="create",method={RequestMethod::POST})
+     * @RequestMapping(route="createGroup",method={RequestMethod::POST})
      * @Middleware(AuthMiddleware::class)
-     * @Validate(validator="GroupValidator",fields={"group_name","avatar","size","introduction","validation"})
+     * @Validate(validator="GroupValidator",fields={"user_id","group_name","avatar","size","introduction","validation"})
      */
     public function createGroup(Request $request)
     {
@@ -39,10 +39,28 @@ class GroupController
             $size = $request->parsedBody('size');
             $introduction = $request->parsedBody('introduction');
             $validation = $request->parsedBody('validation');
-            $result = $this->groupLogic->createGroup($request->user, $groupName, $avatar, $size, $introduction, $validation);
+
+
+            $result = $this->groupLogic->createGroup($request->user,$groupName,$avatar,$size,$introduction,$validation);
             return apiSuccess($result);
-        } catch (\Throwable $throwable) {
-            return apiError($throwable->getCode(), $throwable->getMessage());
+        }catch (\Throwable $throwable){
+            return apiError($throwable->getCode(),$throwable->getMessage());
+        }
+    }
+
+    /**
+     * @RequestMapping(route="getGroupRelation",method={RequestMethod::POST})
+     * @Middleware(AuthMiddleware::class)
+     * @Validate(validator="GroupValidator",fields={"id"})
+     */
+    public function getGroupRelation(Request $request)
+    {
+        try {
+            $groupId = $request->parsedBody('id');
+            $result = $this->groupLogic->getGroupRelation($groupId);
+            return apiSuccess($result);
+        }catch (\Throwable $throwable){
+            return apiError($throwable->getCode(),$throwable->getMessage());
         }
     }
 }
