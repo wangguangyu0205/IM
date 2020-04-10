@@ -194,7 +194,7 @@ class UserLogic
         }
         $applications['list'] = $result;
         if (!empty($applicationIds)) {
-            $change = $this->userApplicationDao->changeApplicationReadStateByIds($applicationIds, UserApplication::ALREADY_READ);
+            $change = $this->userApplicationDao->changeApplicationReadStateByIdsAndReceiverId($applicationIds, $userId, UserApplication::ALREADY_READ);
             if (!$change) throw new \Exception('', ApiCode::USER_APPLICATION_SET_READ_FAIL);
         }
         return $applications;

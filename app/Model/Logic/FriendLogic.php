@@ -141,7 +141,7 @@ class FriendLogic
         $friendGroupInfo = $this->friendGroupDao->findFriendGroupById($groupId);
         if (!$friendGroupInfo) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
 
-        $result = $this->userLogic->createUserApplication($userId, $receiverId, $groupId, UserApplication::APPLICATION_TYPE_FRIEND, $applicationReason, UserApplication::UN_READ);
+        $result = $this->userLogic->createUserApplication($userId, $receiverId, $groupId, UserApplication::APPLICATION_TYPE_FRIEND, $applicationReason, UserApplication::APPLICATION_STATUS_CREATE,UserApplication::UN_READ);
         if (!$result) throw new \Exception('', ApiCode::USER_CREATE_APPLICATION_FAIL);
 
         return $result;
