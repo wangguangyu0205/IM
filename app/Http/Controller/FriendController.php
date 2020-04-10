@@ -98,7 +98,7 @@ class FriendController
     /**
      * @RequestMapping(route="apply",method={RequestMethod::POST})
      * @Middleware(AuthMiddleware::class)
-     * @Validate(validator="FriendValidator",fields={"receiver_id","group_id","application_type","application_reason"})
+     * @Validate(validator="FriendValidator",fields={"receiver_id","group_id","application_reason"})
      */
     public function apply(Request $request)
     {
