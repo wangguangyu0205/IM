@@ -8,6 +8,7 @@ use Swoft\Validator\Annotation\Mapping\IsString;
 use Swoft\Validator\Annotation\Mapping\Length;
 use Swoft\Validator\Annotation\Mapping\NotEmpty;
 use Swoft\Validator\Annotation\Mapping\Required;
+use Swoft\Validator\Annotation\Mapping\Url;
 use Swoft\Validator\Annotation\Mapping\Validator;
 
 /**
@@ -38,6 +39,7 @@ class GroupValidator
      * @IsString()
      * @Required()
      * @NotEmpty()
+     * @Url()
      * @Length(max=255)
      * @var string
      */
@@ -64,7 +66,6 @@ class GroupValidator
     /**
      * @IsInt()
      * @Required()
-     * @NotEmpty()
      * @Enum(values={"0","1"})
      * @var int
      */

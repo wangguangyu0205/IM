@@ -59,6 +59,9 @@ class ApiCode
         self::FRIEND_NOT_FOUND => 'Friend not found!',
         self::FRIEND_NOT_ADD_SELF => 'You can\'t add yourself as a friend !',
 
+        self::GROUP_CREATE_FAIL => 'Group creation failed !',
+        self::GROUP_NOT_FOUND => 'Group not found !',
+
         self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid !',
         self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid !',
         self::JWT_ALG_EMPTY => 'The alg is invalid !',
