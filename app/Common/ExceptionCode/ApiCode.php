@@ -32,7 +32,8 @@ class ApiCode
         FRIEND_NOT_ADD_SELF = 4004;
 
     const GROUP_CREATE_FAIL = 5001,
-        GROUP_NOT_FOUND = 5002;
+        GROUP_NOT_FOUND = 5002,
+        GROUP_RELATION_CREATE_FAIL = 5010;
 
 
         // ext 9000~9999
@@ -61,6 +62,7 @@ class ApiCode
 
         self::GROUP_CREATE_FAIL => 'Group creation failed !',
         self::GROUP_NOT_FOUND => 'Group not found !',
+        self::GROUP_RELATION_CREATE_FAIL => 'Group relation creation failed !',
 
         self::JWT_PRIVATE_KEY_EMPTY => 'The private key is invalid !',
         self::JWT_PUBLIC_KEY_EMPTY => 'The public key is invalid !',

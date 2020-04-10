@@ -29,7 +29,7 @@ class GroupRelation extends BaseMigration
             $blueprint->comment('群友关系');
             $blueprint->increments('group_relation_id')->comment('主键');
             $blueprint->integer('user_id', false, true, 11)->comment('用户id');
-            $blueprint->integer('friend_group_id', false, true, 11)->comment('好友所属分组id');
+            $blueprint->integer('group_id', false, true, 11)->comment('群id');
             $blueprint->timestamps();
 //            $blueprint->tinyInteger('delete_flag', false, true, 1)->default(0)->comment('软删除 0正常 1删除');
             $blueprint->softDeletes()->comment('删除时间 为NULL未删除');
