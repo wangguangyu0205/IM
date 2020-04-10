@@ -12,6 +12,7 @@ var friend_create_group = '/friend/createFriendGroup';
 var friend_get_recommended = '/friend/getRecommendedFriend';
 var friend_search = '/friend/search';
 var friend_apply = '/friend/apply';
+var group_create = '/group/create';
 export {
   static_user_login,
   static_user_info,
@@ -26,5 +27,6 @@ export {
   friend_create_group,
   friend_get_recommended,
   friend_search,
-  friend_apply
+  friend_apply,
+  group_create
 };

@@ -1,8 +1,4 @@
 <?php
-/**
- * @author gaobinzhan <gaobinzhan@gmail.com>
- */
-
 
 namespace App\Model\Dao;
 
@@ -26,6 +22,12 @@ class GroupDao
     public function findGroupById(int $groupId)
     {
         return $this->groupEntity::whereNull('deleted_at')->find($groupId);
+    }
+
+
+    public function create(array $data)
+    {
+        return $this->groupEntity::insertGetId($data);
     }
 
 }

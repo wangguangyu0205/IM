@@ -40,6 +40,7 @@ class GroupController
             $introduction = $request->parsedBody('introduction');
             $validation = $request->parsedBody('validation');
 
+
             $result = $this->groupLogic->createGroup($request->user,$groupName,$avatar,$size,$introduction,$validation);
             return apiSuccess($result);
         }catch (\Throwable $throwable){

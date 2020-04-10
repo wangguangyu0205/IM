@@ -13,6 +13,7 @@ use Swoft\Validator\Annotation\Mapping\IsString;
 use Swoft\Validator\Annotation\Mapping\Length;
 use Swoft\Validator\Annotation\Mapping\NotEmpty;
 use Swoft\Validator\Annotation\Mapping\Required;
+use Swoft\Validator\Annotation\Mapping\Url;
 use Swoft\Validator\Annotation\Mapping\Validator;
 
 /**
@@ -75,6 +76,7 @@ class UserValidator
      * @IsString()
      * @Required()
      * @NotEmpty()
+     * @Url()
      * @Length(max=255)
      * @var string
      */

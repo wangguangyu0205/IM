@@ -80,6 +80,13 @@
     </div>
   </div>
   <div class="layui-form-item layui-col-xs11">
+    <label class="layui-form-label">群头像</label>
+    <div class="layui-input-block">
+      <input type="text" name="avatar" lay-verify="required|url" autocomplete="off"
+             placeholder="输入url即可" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item layui-col-xs11">
     <label class="layui-form-label">群简介</label>
     <div class="layui-input-block">
       <textarea name="introduction" required lay-verify="required" placeholder="简单介绍一下吧！"
@@ -97,8 +104,8 @@
   <div class="layui-form-item layui-col-xs11">
     <label class="layui-form-label">加群验证</label>
     <div class="layui-input-block">
-      <input type="radio" name="validation" value="1" title="需要验证" checked>
-      <input type="radio" name="validation" value="0" title="无需验证">
+      <input type="radio" name="validation" value="1" title="需要验证">
+      <input type="radio" name="validation" value="0" title="无需验证" checked>
     </div>
   </div>
   <div class="layui-form-item layui-col-xs10 layui-col-xs-offset1" style="padding-top: 30px;">
@@ -108,13 +115,24 @@
     </div>
   </div>
 </form>
-<script>
-  layui.use('form', function () {
-    var form = layui.form;
+<script type="module">
+  import {group_create} from '/chat/js/api.js';
+  import {postRequest} from '/chat/js/request.js';
 
+  import {addGroup} from '/chat/js/panel.js';
+
+  layui.use(['form', 'layer', 'jquery'], function () {
+    var form = layui.form;
     form.on('submit(createGroup)', function (data) {
+      postRequest(group_create, data.field, function (data) {
+        addGroup(data);
+        setTimeout(function () {
+          let index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+        }, 1000)
+      });
       return false;
-    });
+    })
   });
 </script>
 </body>

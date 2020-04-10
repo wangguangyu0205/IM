@@ -1,8 +1,4 @@
 <?php
-/**
- * @author gaobinzhan <gaobinzhan@gmail.com>
- */
-
 
 namespace App\Model\Logic;
 
@@ -23,6 +19,7 @@ class GroupLogic
      * @var GroupDao
      */
     protected $groupDao;
+
 
     public function createGroup(int $userId,string $groupName,string $avatar,string $size,string $introduction,int $validation)
     {
