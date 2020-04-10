@@ -22,4 +22,12 @@ class GroupRelationDao
     public function createGroupRelation(array $data){
         return $this->groupRelationEntity::insertGetId($data);
     }
+
+    public function findGroupRelationByGroupId(int $groupId)
+    {
+        return $this->groupRelationEntity::whereNull('deleted_at')
+            ->where('group_id','=',$groupId)
+            ->select('user_id')
+            ->get()->toArray();
+    }
 }

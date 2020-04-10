@@ -47,4 +47,20 @@ class GroupController
             return apiError($throwable->getCode(),$throwable->getMessage());
         }
     }
+
+    /**
+     * @RequestMapping(route="getGroupRelation",method={RequestMethod::POST})
+     * @Middleware(AuthMiddleware::class)
+     * @Validate(validator="GroupValidator",fields={"id"})
+     */
+    public function getGroupRelation(Request $request)
+    {
+        try {
+            $groupId = $request->parsedBody('id');
+            $result = $this->groupLogic->getGroupRelation($groupId);
+            return apiSuccess($result);
+        }catch (\Throwable $throwable){
+            return apiError($throwable->getCode(),$throwable->getMessage());
+        }
+    }
 }

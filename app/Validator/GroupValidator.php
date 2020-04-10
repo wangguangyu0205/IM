@@ -24,6 +24,14 @@ class GroupValidator
      * @NotEmpty()
      * @var int
      */
+    protected $id = '';
+
+    /**
+     * @IsInt()
+     * @Required()
+     * @NotEmpty()
+     * @var int
+     */
     protected $user_id = '';
 
     /**
