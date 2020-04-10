@@ -146,9 +146,8 @@ class GroupLogic
         if ($count >= $groupInfo->getSize()) throw new \Exception('', ApiCode::GROUP_FULL);
 
         $applicationStatus = ($groupInfo->getValidation() == Group::VALIDATION_NOT) ? UserApplication::APPLICATION_STATUS_ACCEPT : UserApplication::APPLICATION_STATUS_CREATE;
-        $applicationReadState = ($groupInfo->getValidation() == Group::VALIDATION_NOT) ? UserApplication::ALREADY_READ : UserApplication::UN_READ;
 
-        $result = $this->userLogic->createUserApplication($userId, $groupInfo->getUserId(), $groupId, UserApplication::APPLICATION_TYPE_GROUP, $applicationReason, $applicationStatus,$applicationReadState);
+        $result = $this->userLogic->createUserApplication($userId, $groupInfo->getUserId(), $groupId, UserApplication::APPLICATION_TYPE_GROUP, $applicationReason, $applicationStatus,UserApplication::UN_READ);
         if (!$result) throw new \Exception('', ApiCode::USER_CREATE_APPLICATION_FAIL);
 
         if ($groupInfo->getValidation() == Group::VALIDATION_NOT) {
