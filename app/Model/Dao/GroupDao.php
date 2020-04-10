@@ -23,4 +23,9 @@ class GroupDao
      */
     protected $groupEntity;
 
+    public function findGroupById(int $groupId)
+    {
+        return $this->groupEntity::whereNull('deleted_at')->find($groupId);
+    }
+
 }

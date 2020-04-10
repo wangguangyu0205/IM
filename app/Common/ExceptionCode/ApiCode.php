@@ -31,7 +31,11 @@ class ApiCode
         FRIEND_NOT_FOUND = 4003,
         FRIEND_NOT_ADD_SELF = 4004;
 
-    // ext 9000~9999
+    const GROUP_CREATE_FAIL = 5001,
+        GROUP_NOT_FOUND = 5002;
+
+
+        // ext 9000~9999
     const
         JWT_PRIVATE_KEY_EMPTY = 9001,
         JWT_PUBLIC_KEY_EMPTY = 9002,
