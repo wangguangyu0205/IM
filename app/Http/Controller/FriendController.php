@@ -108,7 +108,7 @@ class FriendController
             $groupId = $request->parsedBody('group_id');
             $applicationType = $request->parsedBody('application_type');
             $applicationReason = $request->parsedBody('application_reason');
-            $this->userLogic->apply($userId, $receiverId, $groupId, $applicationType, $applicationReason);
+            $this->friendLogic->apply($userId, $receiverId, $groupId, $applicationReason);
             return apiSuccess();
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());

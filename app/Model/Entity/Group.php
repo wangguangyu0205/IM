@@ -19,6 +19,10 @@ use Swoft\Db\Eloquent\Model;
  */
 class Group extends Model
 {
+
+    const VALIDATION_NOT = 0;
+    const VALIDATION_NEED = 1;
+
     /**
      * 主键
      * @Id()
@@ -83,7 +87,7 @@ class Group extends Model
     private $validation;
 
     /**
-     * 
+     *
      *
      * @Column(name="created_at", prop="createdAt")
      *
@@ -92,7 +96,7 @@ class Group extends Model
     private $createdAt;
 
     /**
-     * 
+     *
      *
      * @Column(name="updated_at", prop="updatedAt")
      *

@@ -139,20 +139,26 @@
           , layout: ['prev', 'next', 'count']
           , curr: 1
           , jump: function (obj, first) {
-            if (first) return false;
+            if (first) {
+              rendering(data.list);
+              return false;
+            }
             let page = obj.curr;
             postRequest(friend_search, {keyword: keyword, page: page, size: 20}, function (data) {
-              var html = laytpl(LAY_tpl.value).render({
-                data: data.list,
-                legend: '<a class="back"><i class="layui-icon">&#xe65c;</i>返回</a> 查找结果',
-              });
-              $('#LAY_view').html(html);
+              rendering(data.list)
             });
           }
         });
 
       })
     });
+    function rendering(data){
+      var html = laytpl(LAY_tpl.value).render({
+        data: data,
+        legend: '<a class="back"><i class="layui-icon">&#xe65c;</i>返回</a> 查找结果',
+      });
+      $('#LAY_view').html(html);
+    };
     $('body').on('click', '.add', function () {
       var li = $(this).parents('li');
       var username = li.attr('data-name');
@@ -166,7 +172,6 @@
           postRequest(friend_apply, {
               receiver_id: receiver_id,
               group_id: group,
-              application_type: 'friend',
               application_reason: remark
             }, function (data) {
               layer.close(index);

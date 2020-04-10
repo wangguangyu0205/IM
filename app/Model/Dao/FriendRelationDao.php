@@ -24,9 +24,17 @@ class FriendRelationDao
      */
     protected $friendRelationEntity;
 
-    public function getFriendRelationByFriendGroupIds(array $friendGroupIds){
+    public function getFriendRelationByFriendGroupIds(array $friendGroupIds)
+    {
         return $this->friendRelationEntity::whereNull('deleted_at')
-            ->whereIn('friend_group_id',$friendGroupIds)
+            ->whereIn('friend_group_id', $friendGroupIds)
             ->get();
+    }
+
+    public function checkIsFriendRelation(int $userId, int $friendId)
+    {
+        return $this->friendRelationEntity::where('user_id', '=', $userId)
+            ->where('friend_id', '=', $friendId)
+            ->first();
     }
 }

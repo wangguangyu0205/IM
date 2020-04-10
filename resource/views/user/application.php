@@ -77,10 +77,22 @@
                 if(item.application_role == 'create'){ }}
                         <li data-uid="{{ item.receiver_id }}">
                           <a href="javascript:void(0);">
-                            <img src="{{ item.avatar }}" class="layui-circle layim-msgbox-avatar">
+                            <img src="{{# if(item.application_type == 'friend'){ }}
+                                  {{ item.receiver_avatar }}
+                                {{# }else{ }}
+                                  {{ item.group_avatar }}
+                                {{# } }}" class="layui-circle layim-msgbox-avatar">
                           </a>
                           <p class="layim-msgbox-user">
-                            <a href="javascript:void(0);"><b>{{ item.name }}</b></a>
+                            <a href="javascript:void(0);">
+                              <b>
+                                {{# if(item.application_type == 'friend'){ }}
+                                  {{ item.receiver_name }}
+                                {{# }else{ }}
+                                  {{ item.group_name }}
+                                {{# } }}
+                              </b>
+                            </a>
                             <span>{{ item.created_at }}</span>
                           </p>
                           <p class="layim-msgbox-content">
@@ -105,18 +117,18 @@
                     <li data-uid="{{ item.from }}" data-id="{{ item.msgIdx }}" data-type="{{item.msgType}}"
                         data-name="{{ item.name }}"">
                                                 <a href="javascript:void(0);">
-                                                  <img src="{{ item.avatar }}"
+                                                  <img src="{{ item.receiver_avatar }}"
                                                        class="layui-circle layim-msgbox-avatar">
                                                 </a>
                                                 <p class="layim-msgbox-user">
-                                                  <a href="javascript:void(0);"><b>{{ item.name }}</b></a>
+                                                  <a href="javascript:void(0);"><b>{{ item.user_name }}</b></a>
                                                   <span>{{ item.created_at }}</span>
                                                 </p>
                                                 <p class="layim-msgbox-content">
                                                   {{# if(item.application_type == 'friend'){ }}
                                                   申请添加你为好友
                                                   {{# }else{ }}
-                                                  申请加入 {{ item.name }} 群
+                                                  申请加入 {{ item.group_name }} 群
                                                   {{# } }}
                                                   <span>{{ item.application_reason ? '附言: '+item.application_reason : '' }}</span>
                                                 </p>
@@ -128,7 +140,7 @@
                                                 </p>
   </li>
 
-                  {{#  } else { }}
+  {{#  } else { }}
                         <li>
                           <a href="javascript:void(0);">
                             <img src="{{ item.avatar }}" class="layui-circle layim-msgbox-avatar">
@@ -203,7 +215,6 @@
       var date = myDate.getDate();
       return month + "月" + date + "日";
     };
-    //请求消息
     var renderMsg = function (page, callback) {
       postRequest(user_get_application, {
         page: page || 1,
@@ -213,14 +224,11 @@
         callback && callback(list, data.pageCount);
       });
     };
-
-
-    //消息信息流
     flow.load({
-      elem: '#LAY_view' //流加载容器
+      elem: '#LAY_view'
       , isAuto: false
       , end: '<li class="layim-msgbox-tips">暂无更多新消息</li>'
-      , done: function (page, next) { //加载下一页
+      , done: function (page, next) {
         renderMsg(page, function (data, pages) {
           var html = laytpl(LAY_tpl.value).render({
             data: data
@@ -230,9 +238,8 @@
         });
       }
     });
-    //操作
     var active = {
-      IsExist: function (avatar) { //判断头像是否存在
+      /*IsExist: function (avatar) { //判断头像是否存在
         var ImgObj = new Image();
         ImgObj.src = avatar;
         if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
@@ -240,8 +247,8 @@
         } else {
           return false;
         }
-      },
-      agree: function (othis) {
+      },*/
+      /*agree: function (othis) {
         parent.layui.im.receiveAddFriendGroup(othis, 2);//type 1添加好友 3添加群
       }
       //拒绝
@@ -257,14 +264,9 @@
           , avatar: avatar
           , id: uid
         });
-      }
+      }*/
 
     };
-    //打开页面即把系统消息标记为已读
-    $(function () {
-      $.get('../../../../../../class/doAction.php?action=set_allread', {}, function (res) {
-      });
-    });
     $('body').on('click', '.layui-btn', function () {
       var othis = $(this), type = othis.data('type');
       active[type] ? active[type].call(this, othis) : '';

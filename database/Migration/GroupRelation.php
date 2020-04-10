@@ -34,7 +34,6 @@ class GroupRelation extends BaseMigration
 //            $blueprint->tinyInteger('delete_flag', false, true, 1)->default(0)->comment('软删除 0正常 1删除');
             $blueprint->softDeletes()->comment('删除时间 为NULL未删除');
             $blueprint->index('user_id');
-            $blueprint->index('friend_group_id');
             $blueprint->engine = 'Innodb';
             $blueprint->charset = 'utf8mb4';
         });

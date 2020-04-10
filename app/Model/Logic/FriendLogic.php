@@ -12,6 +12,7 @@ use App\Model\Dao\FriendRelationDao;
 use App\Model\Dao\UserDao;
 use App\Model\Entity\FriendGroup;
 use App\Model\Entity\FriendRelation;
+use App\Model\Entity\UserApplication;
 use Swoft\Bean\Annotation\Mapping\Bean;
 use Swoft\Bean\Annotation\Mapping\Inject;
 
@@ -27,6 +28,12 @@ class FriendLogic
      * @var FriendGroupDao
      */
     protected $friendGroupDao;
+
+    /**
+     * @Inject()
+     * @var UserLogic
+     */
+    protected $userLogic;
 
     /**
      * @Inject()
@@ -118,5 +125,25 @@ class FriendLogic
     public function searchFriend(string $keyword, int $page, int $size)
     {
         return $this->userDao->searchFriend($keyword, $page, $size);
+    }
+
+    public function apply(int $userId, int $receiverId, int $groupId, string $applicationReason)
+    {
+        if ($userId == $receiverId) throw new \Exception('', ApiCode::FRIEND_NOT_ADD_SELF);
+
+        /** @var FriendRelation $check */
+        $check = $this->friendRelationDao->checkIsFriendRelation($userId, $receiverId);
+        if ($check && $check->getDeletedAt() == NUll) throw new \Exception('', ApiCode::FRIEND_RELATION_ALREADY);
+
+        $friendInfo = $this->userLogic->findUserInfoById($receiverId);
+        if (!$friendInfo) throw new \Exception('', ApiCode::FRIEND_NOT_FOUND);
+
+        $friendGroupInfo = $this->friendGroupDao->findFriendGroupById($groupId);
+        if (!$friendGroupInfo) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
+
+        $result = $this->userLogic->createUserApplication($userId, $receiverId, $groupId, UserApplication::APPLICATION_TYPE_FRIEND, $applicationReason, UserApplication::UN_READ);
+        if (!$result) throw new \Exception('', ApiCode::USER_CREATE_APPLICATION_FAIL);
+
+        return $result;
     }
 }

@@ -6,6 +6,7 @@ namespace App\Http\Controller;
 use App\Helper\AuthHelper;
 use App\Helper\JwtHelper;
 use App\Model\Logic\FriendLogic;
+use App\Model\Logic\GroupLogic;
 use App\Model\Logic\UserLogic;
 use Swoft\Bean\Annotation\Mapping\Inject;
 use Swoft\Http\Message\Request;
@@ -39,6 +40,12 @@ class UserController
      * @var FriendLogic
      */
     protected $friendLogic;
+
+    /**
+     * @Inject()
+     * @var GroupLogic
+     */
+    protected $groupLogic;
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
@@ -108,7 +115,8 @@ class UserController
         try {
             $mine = $this->userLogic->getMine();
             $friend = $this->friendLogic->getFriend();
-            return apiSuccess(['mine' => $mine, 'friend' => $friend]);
+            $group = $this->groupLogic->getGroup();
+            return apiSuccess(['mine' => $mine, 'friend' => $friend, 'group' => $group]);
         } catch (\Throwable $throwable) {
             return apiError($throwable->getCode(), $throwable->getMessage());
         }
