@@ -45,6 +45,7 @@ class UserApplicationDao
                 $builder->where('user_id', '=', $userId);
                 $builder->orWhere('receiver_id', '=', $userId);
             })
+            ->orderBy('created_at','desc')
             ->paginate($page, $size);
     }
 
