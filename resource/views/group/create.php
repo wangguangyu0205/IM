@@ -118,7 +118,6 @@
 <script type="module">
   import {group_create} from '/chat/js/api.js';
   import {postRequest} from '/chat/js/request.js';
-
   import {addGroup} from '/chat/js/panel.js';
 
   layui.use(['form', 'layer', 'jquery'], function () {

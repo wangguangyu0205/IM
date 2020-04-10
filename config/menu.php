@@ -31,6 +31,13 @@ return [
                 'url' => '/static/createGroup',
                 'width' => '550px',
                 'height' => '420px',
+            ],
+            [
+                'title' => '查找群',
+                'id' => 'findGroup',
+                'url' => '/static/findGroup',
+                'width' => '1000px',
+                'height' => '520px',
             ]
         ]
     ]

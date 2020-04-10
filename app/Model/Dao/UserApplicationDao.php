@@ -33,7 +33,7 @@ class UserApplicationDao
     public function getUnreadApplicationCount(int $userId)
     {
         return $this->userApplicationEntity::whereNull('deleted_at')
-            ->where('read_state', 'eq', $this->userApplicationEntity::UNREAD)
+            ->where('read_state', 'eq', $this->userApplicationEntity::UN_READ)
             ->where(function (Builder $builder) use ($userId) {
                 $builder->where('user_id', '=', $userId);
                 $builder->orWhere('receiver_id', '=', $userId);
@@ -44,11 +44,16 @@ class UserApplicationDao
     public function getApplication(int $userId, int $page, int $size)
     {
         return $this->userApplicationEntity::whereNull('deleted_at')
-            ->where('read_state', 'eq', $this->userApplicationEntity::UNREAD)
             ->where(function (Builder $builder) use ($userId) {
                 $builder->where('user_id', '=', $userId);
                 $builder->orWhere('receiver_id', '=', $userId);
             })
             ->paginate($page, $size);
+    }
+
+    public function changeApplicationReadStateByIds(array $ids,int $readState){
+        return $this->userApplicationEntity::whereNull('deleted_at')
+            ->whereIn('user_application_id',$ids)
+            ->update(['read_state' => $readState]);
     }
 }

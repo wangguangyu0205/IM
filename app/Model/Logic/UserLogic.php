@@ -8,6 +8,8 @@ namespace App\Model\Logic;
 
 use App\ExceptionCode\ApiCode;
 use App\Model\Dao\FriendGroupDao;
+use App\Model\Dao\FriendRelationDao;
+use App\Model\Dao\GroupDao;
 use App\Model\Dao\UserApplicationDao;
 use App\Model\Dao\UserDao;
 use App\Model\Dao\UserLoginLogDao;
@@ -31,9 +33,9 @@ class UserLogic
 
     /**
      * @Inject()
-     * @var FriendGroupDao
+     * @var GroupDao
      */
-    protected $friendGroupDao;
+    protected $groupDao;
 
     /**
      * @Inject()
@@ -108,6 +110,7 @@ class UserLogic
 
     public function getMine()
     {
+        /** @var User $userInfo */
         $userInfo = context()->getRequest()->userInfo;
         return [
             'username' => $userInfo->getUsername(),
@@ -118,32 +121,23 @@ class UserLogic
         ];
     }
 
-    public function apply(int $userId, int $receiverId, int $groupId, string $applicationType, string $applicationReason)
-    {
-        if ($userId == $receiverId) throw new \Exception('', ApiCode::FRIEND_NOT_ADD_SELF);
-
-        $friendInfo = $this->findUserInfoById($receiverId);
-        if (!$friendInfo) throw new \Exception('', ApiCode::FRIEND_NOT_FOUND);
-
-        $friendGroupInfo = $this->friendGroupDao->findFriendGroupById($groupId);
-        if (!$friendGroupInfo) throw new \Exception('', ApiCode::FRIEND_GROUP_NOT_FOUND);
-
-        $result = $this->createUserApplication($userId, $receiverId, $groupId, $applicationType, $applicationReason);
-        if (!$result) throw new \Exception('', ApiCode::USER_CREATE_APPLICATION_FAIL);
-
-        return $result;
-    }
-
-    public function createUserApplication(int $userId, int $receiverId, int $groupId, string $applicationType, string $applicationReason)
+    public function createUserApplication(
+        int $userId,
+        int $receiverId,
+        int $groupId,
+        string $applicationType,
+        string $applicationReason,
+        int $applicationStatus = UserApplication::APPLICATION_STATUS_CREATE,
+        int $readState = UserApplication::UN_READ)
     {
         return $this->userApplicationDao->createUserApplication([
             'user_id' => $userId,
             'receiver_id' => $receiverId,
             'group_id' => $groupId,
             'application_type' => $applicationType,
-            'application_status' => UserApplication::APPLICATION_STATUS_CREATE,
+            'application_status' => $applicationStatus,
             'application_reason' => $applicationReason,
-            'read_state' => UserApplication::UNREAD
+            'read_state' => $readState
         ]);
     }
 
@@ -156,6 +150,9 @@ class UserLogic
     {
         $applications = $this->userApplicationDao->getApplication($userId, $page, $size);
         $result = [];
+        $userIds = [];
+        $groupIds = [];
+        $applicationIds = array_column($applications['list'], 'userApplicationId');
         /** @var UserApplication $application */
         foreach ($applications['list'] as $application) {
 
@@ -165,9 +162,14 @@ class UserLogic
                     : UserApplication::APPLICATION_CREATE_USER)
                 : UserApplication::APPLICATION_RECEIVER_USER;
 
+            ($application['applicationType'] == UserApplication::APPLICATION_TYPE_FRIEND) && array_push($userIds, $application['userId']) && array_push($userIds, $application['receiverId']);;
+            ($application['applicationType'] == UserApplication::APPLICATION_TYPE_GROUP) && array_push($groupIds, $application['groupId']);
+
             $result[] = [
+                'user_application_id' => $application['userApplicationId'],
                 'user_id' => $application['userId'],
                 'receiver_id' => $application['receiverId'],
+                'group_id' => $application['groupId'],
                 'application_role' => $applicationRole,
                 'application_type' => $application['applicationType'],
                 'created_at' => $application['createdAt'],
@@ -177,7 +179,24 @@ class UserLogic
                 'application_reason' => $application['applicationReason']
             ];
         }
+        $userInfos = array_column($this->userDao->getUserByIds($userIds)->toArray(), null, 'userId');
+        $groupInfos = array_column($this->groupDao->getGroupByIds($groupIds)->toArray(), null, 'groupId');
+
+        foreach ($result as &$item) {
+            if ($item['application_type'] == UserApplication::APPLICATION_TYPE_GROUP) {
+                $item['group_name'] = $groupInfos[$item['group_id']]['groupName'] ?? '';
+                $item['group_avatar'] = $groupInfos[$item['group_id']]['avatar'] ?? '';
+            }
+            $item['user_name'] = $userInfos[$item['user_id']]['username'] ?? '';
+            $item['user_avatar'] = $userInfos[$item['user_id']]['avatar'] ?? '';
+            $item['receiver_name'] = $userInfos[$item['receiver_id']]['username'] ?? '';
+            $item['receiver_avatar'] = $userInfos[$item['receiver_id']]['avatar'] ?? '';
+        }
         $applications['list'] = $result;
+        if (!empty($applicationIds)) {
+            $change = $this->userApplicationDao->changeApplicationReadStateByIds($applicationIds, UserApplication::ALREADY_READ);
+            if (!$change) throw new \Exception('', ApiCode::USER_APPLICATION_SET_READ_FAIL);
+        }
         return $applications;
     }
 

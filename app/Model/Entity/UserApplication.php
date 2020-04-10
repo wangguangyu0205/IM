@@ -19,8 +19,12 @@ use Swoft\Db\Eloquent\Model;
  */
 class UserApplication extends Model
 {
-    const UNREAD = 0;
     const APPLICATION_STATUS_CREATE = 0;
+    const APPLICATION_STATUS_ACCEPT = 1;
+    const APPLICATION_STATUS_REFUSE = 2;
+
+    const UN_READ = 0;
+    const ALREADY_READ = 1;
 
     const APPLICATION_STATUS_TEXT = [
         '等待验证',
@@ -31,6 +35,9 @@ class UserApplication extends Model
     const APPLICATION_CREATE_USER  = 'create';
     const APPLICATION_RECEIVER_USER  = 'receiver';
     const APPLICATION_SYSTEM = 'system';
+
+    const APPLICATION_TYPE_FRIEND = 'friend';
+    const APPLICATION_TYPE_GROUP = 'group';
 
     /**
      * 主键

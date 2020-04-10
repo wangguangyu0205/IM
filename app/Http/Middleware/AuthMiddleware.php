@@ -40,7 +40,7 @@ class AuthMiddleware implements MiddlewareInterface
         $prefix = 'Bearer ';
 
         if (empty($authorization)) {
-            $params = $request->getQueryParams();
+            $params = array_merge($request->getParsedBody(),$request->getQueryParams());
             $authorization = $prefix . ($params['token'] ?? '');
         }
 

@@ -78,4 +78,30 @@ class GroupValidator
      * @var int
      */
     protected $validation = '';
+
+    /**
+     * @IsInt()
+     * @Required()
+     * @NotEmpty()
+     * @var int
+     */
+    protected $group_id = '';
+
+    /**
+     * @IsString()
+     * @Required()
+     * @NotEmpty()
+     * @Enum(values={"friend","group"})
+     * @var string
+     */
+    protected $application_type = '';
+
+    /**
+     * @IsString()
+     * @Required()
+     * @NotEmpty()
+     * @Length(max=255)
+     * @var
+     */
+    protected $application_reason = '';
 }
